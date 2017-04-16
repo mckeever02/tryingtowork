@@ -1,0 +1,140 @@
+
+// Converted Variables
+
+
+// Custom Media Query Variables
+
+
+/*
+
+  STYLES
+
+
+
+*/
+
+html {
+  height: 100%;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+html, input {
+  font-family: Consolas,
+               monaco,
+               monospace;
+}
+
+svg {
+	max-height: 100%;
+
+	&:not(:root) {
+		overflow: hidden;
+	}
+}
+
+.card-item {
+  &:after, &:before {
+    content:"";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: .125rem;
+    border: 1px solid $black;
+    background-color: $dark-blue;
+  }
+  &:after {
+    top: .65em;
+    right: -.9em;
+    z-index: -2;
+  }
+  &:before {
+    top: .3em;
+    right: -.5em;
+    z-index: -1;
+  }
+}
+
+.text-stroke {
+  -webkit-text-stroke: 1px $light-green;
+  &::selection {
+    color: $light-green;
+    background: transparent;
+    -webkit-text-stroke: 0;
+  }
+  @media #{$breakpoint-large}{
+    -webkit-text-stroke: 2px $light-green;
+  }
+}
+
+.transparent {
+  color: transparent;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.icon-md {
+  width: 14px;
+  height: 14px;
+}
+
+.icon-sm {
+  width: 11px;
+  height: 11px;
+}
+
+.icon-sm-list {
+  width: 6px;
+  &:not(:first-of-type) {
+    margin-left: -4px;
+  }
+}
+
+::-moz-selection {
+	background: $light-green;
+}
+::selection {
+	background: $light-green;
+}
+
+input::placeholder {
+  color: $light-purple;
+}
+
+.list-horizontal-disc {
+  li:not(:first-of-type)::before {
+    content: "\b7";
+    padding-right: $spacing-small;
+  }
+}
+
+.spaces-item .list-horizontal-disc {
+  li:last-of-type::before {
+    padding-right: 0;
+  }
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input-icon:focus {
+  + .icon {
+    color: $white;
+  }
+}
+
+.space-item-row {
+  min-height: 50px;
+}
+
+.link {
+  outline: none;
+}

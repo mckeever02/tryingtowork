@@ -1,0 +1,96 @@
+---
+layout: default
+---
+
+<div id="spaces">
+  <form class="center tc mw7 ph3 relative">
+    <input id="search" autofocus placeholder="Search coffee shops, cafes, location, fast wifi etc..." class="fuzzy-search pl5 bg-animate input-reset input input-icon ba b--black br-pill pa3 mb2 db w-100 bg-black-20 hover-bg-black-30 white" type="search">
+    <svg class="icon absolute z-2 left-2-5 top-1 light-purple">
+      <use xlink:href="#icon-search"></use>
+    </svg>
+  </form>
+
+  <div class="center mt5 ph3 mw6 mw10-ns">
+    <div class="cf list">
+      {% assign sorted = (site.spaces | sort: 'date') | reverse %}
+      {% for space in sorted %}
+        <div class="fl w-100 w-50-m w-third-l w-25-xl ph4-ns mb4 mb5-ns">
+          <article class="spaces-item center br1 hidden ba b--black relative card-item bg-dark-blue mw6-l">
+            <div class="bg-navy white bb b--black br1 br--top mv0 pv2 pv3-ns ph3">
+              <h3 class="f3 f2-xl ma0 mt3 serif fw9 spaces-title">{{space.title}}</h3>
+              <ul class="list list-horizontal-disc tracked f7 ttu pa0 ma0 mb1">
+                <li class="dib mv1 spaces-type">{{space.type}}</li>
+                <li class="dib mv1 spaces-location">{{space.location}}</li>
+                <li class="dib mv1">
+                  {% include rating-system.html %}
+                </li>
+              </ul>
+            </div>
+            <div class="space-item-row flex pl3 items-center w-100 bb b--black">
+              <svg class="icon icon-md v-mid pr3">
+                {% if space.rating < 1  %}
+                <use xlink:href="#icon-exclamation"></use>
+                {%else%}
+                <use xlink:href="#icon-bolt"></use>
+                {%endif%}
+              </svg>
+              {% if space.rating <= 1 and space.rating <= 2 %}
+              <span class="red spaces-speed" data-speed="slow wifi speed">
+              {%elsif space.rating >= 2 and space.rating <= 3 %}
+              <span class="orange spaces-speed" data-speed="medium wifi speed">
+              {%else%}
+              <span class="green spaces-speed" data-speed="fast wifi speed">
+              {%endif%}
+                {% if space.rating >= 1 %}
+                {{space.speed}}Mbps
+                {% else %}
+                Not working
+                {%endif%}
+              </span>
+              <span class="db washed-blue mlauto dib fr ttu f7 fw6 tracked pr3">
+                updated: {{space.date | date: "%d&middot;%m&middot;%Y"}}
+              </span>
+            </div>
+
+            <div class="space-item-row flex pl3 items-center w-100 bb b--black">
+              {% if space.password %}
+                <svg class="icon icon-md v-mid pr3">
+                  <use xlink:href="#icon-lock"></use>
+                </svg>
+                <span class="password mrauto" id="password" value="{{space.password}}">
+                  {{space.password}}
+                </span>
+                <a id="copy" class="link copy bl b--black f5 ph4 pv3 dib white bg-transparent bg-animate hover-bg-navy b"  href="javascript:void(0)">Copy</a>
+                {% else %}
+                <svg class="icon icon-md v-mid pr3">
+                  <use xlink:href="#icon-unlock"></use>
+                </svg>
+                No password
+              {%endif%}
+            </div>
+
+            <div class="space-item-row flex pl3 items-center w-100 b--black">
+              <svg class="icon icon-md v-mid pr3">
+                <use xlink:href="#icon-clock"></use>
+              </svg>
+              {% assign currentDay = site.time | date: '%A' %}
+              {% for time in space.opening_times %}
+                {% if time.day contains currentDay %}
+                  {%assign open = true%}
+                  {%assign openingTimes = time.time%}
+                {%endif%}
+              {%endfor%}
+
+              {% if open == true %}
+                <strong class="spaces-times">Open today&nbsp;</strong>    {{openingTimes}}
+              {%else %}
+                <strong class="spaces-times">Closed today&nbsp;</strong>
+              {%endif%}
+            </div>
+          </article>
+        </div><!-- /space-item -->
+      {%endfor%}
+    </div>
+  </div>
+
+</div><!-- #spaces -->
