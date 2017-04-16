@@ -18,5 +18,5 @@ tiemposFamily
             document.documentElement.classList.add('fonts-loaded');
             // set mark on storage for future page views
             sessionStorage.setItem('fonts-loaded', true);
-        }, 750);
+        });
     });

@@ -3,7 +3,7 @@ description: A collection of free spaces to work online around Belfast City Cent
 author: Michael
 author_link: http://michaelmckeever.co
 markdown: redcarpet
-highlighter: pygments # or rouge or null
+highlighter: rouge # or rouge or null
 exclude: ["node_modules", "gulpfile.js", "package.json"]
 
 collections:
