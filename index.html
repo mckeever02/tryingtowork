@@ -27,11 +27,7 @@ layout: default
           </div>
           <div class="space-item-row flex pl3 items-center w-100 bb b--black">
             <svg class="icon icon-md v-mid pr3">
-              {% if space.rating < 1  %}
-              <use xlink:href="#icon-exclamation"></use>
-              {%else%}
               <use xlink:href="#icon-bolt"></use>
-              {%endif%}
             </svg>
             {% if space.rating <= 1 and space.rating <= 2 %}
             <span class="red spaces-speed" data-speed="slow wifi speed">

@@ -1,15 +1,16 @@
 # humanstxt.org/
 # The humans responsible & technology colophon
 
-# TEAM
+# AUTHOR
 
-    <name> -- <role> -- <twitter>
+    Michael Mckeever
+    @mick_mckeever
 
-# THANKS
+# COLOPHON
 
-    <name>
+  Hosted on Github pages. Built on tachyons. Served fonts are Tiempos Headline Black and Consolas. Task running created with Gulp.
 
-# TECHNOLOGY COLOPHON
+# TECHNOLOGIES
 
     CSS3, HTML5
-    Apache Server Configs, jQuery, Modernizr, Normalize.css
+    Tachyons, list.js, clipboard.js, Font Face Observer, LoadJS
