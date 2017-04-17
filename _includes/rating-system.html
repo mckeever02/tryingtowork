@@ -1,29 +1,40 @@
-{% if space.rating >= 1 %}
-<svg class="icon icon-sm icon-sm-list v-mid">
-{%else%}
-<svg class="icon icon-sm icon-sm-list washed-blue v-mid">
-{%endif%}
-  <use xlink:href="#icon-bolt"></use>
-</svg>
-{% if space.rating >= 2 %}
-<svg class="icon icon-sm icon-sm-list v-mid">
-{%else%}
-<svg class="icon icon-sm icon-sm-list washed-blue v-mid">
-{%endif%}
-  <use xlink:href="#icon-bolt"></use>
-</svg>
 
-{% if space.rating >= 3 %}
-<svg class="icon icon-sm icon-sm-list v-mid">
+{% if space.speed >= 50 %}
+  {% for i in (1..4) %}
+  <svg class="icon light-green icon-sm icon-sm-list v-mid">
+    <use xlink:href="#icon-bolt"></use>
+  </svg>
+  {% endfor %}
 {%else%}
-<svg class="icon icon-sm icon-sm-list washed-blue v-mid">
+  {% if space.speed >= 1 %}
+  <svg class="icon icon-sm icon-sm-list v-mid">
+  {%else%}
+  <svg class="icon icon-sm icon-sm-list washed-blue v-mid">
+  {%endif%}
+    <use xlink:href="#icon-bolt"></use>
+  </svg>
+
+  {% if space.speed >= 3 %}
+  <svg class="icon icon-sm icon-sm-list v-mid">
+  {%else%}
+  <svg class="icon icon-sm icon-sm-list washed-blue v-mid">
+  {%endif%}
+    <use xlink:href="#icon-bolt"></use>
+  </svg>
+
+  {% if space.speed >= 10 %}
+  <svg class="icon icon-sm icon-sm-list v-mid">
+  {%else%}
+  <svg class="icon icon-sm icon-sm-list washed-blue v-mid">
+  {%endif%}
+    <use xlink:href="#icon-bolt"></use>
+  </svg>
+
+  {% if space.speed >= 20 %}
+  <svg class="icon icon-sm icon-sm-list v-mid">
+  {%else%}
+  <svg class="icon icon-sm icon-sm-list washed-blue v-mid">
+  {%endif%}
+    <use xlink:href="#icon-bolt"></use>
+  </svg>
 {%endif%}
-  <use xlink:href="#icon-bolt"></use>
-</svg>
-{% if space.rating >= 4 %}
-<svg class="icon icon-sm icon-sm-list v-mid">
-{%else%}
-<svg class="icon icon-sm icon-sm-list washed-blue v-mid">
-{%endif%}
-  <use xlink:href="#icon-bolt"></use>
-</svg>

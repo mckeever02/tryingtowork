@@ -5,7 +5,6 @@ type: "Arts Venue"
 location: "Cathedral Quarter"
 speed:
 password: BlackBoxVenue
-rating: 0
 opening_times:
   - day: Wednesday
     time: 10am-11pm

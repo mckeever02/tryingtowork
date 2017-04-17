@@ -29,14 +29,16 @@ layout: default
             <svg class="icon icon-md v-mid pr3">
               <use xlink:href="#icon-bolt"></use>
             </svg>
-            {% if space.rating <= 1 and space.rating <= 2 %}
+            {% if space.speed <= 1 and space.speed <= 1.9 %}
             <span class="red spaces-speed" data-speed="slow wifi speed">
-            {%elsif space.rating >= 2 and space.rating <= 3 %}
+            {%elsif space.speed >= 2 and space.speed <= 19 %}
             <span class="orange spaces-speed" data-speed="medium wifi speed">
-            {%else%}
+            {%elsif space.speed >= 20 %}
             <span class="green spaces-speed" data-speed="fast wifi speed">
+            {% else %}
+            <span class="red spaces-speed" data-speed="No wifi">
             {%endif%}
-              {% if space.rating >= 1 %}
+              {% if space.speed >= 0.1 %}
               {{space.speed}}Mbps
               {% else %}
               Not working
@@ -52,7 +54,7 @@ layout: default
               <svg class="icon icon-md v-mid pr3">
                 <use xlink:href="#icon-lock"></use>
               </svg>
-              <span class="password mrauto truncate" id="password" value="{{space.password}}">
+              <span class="password mrauto truncate spaces-password" id="password" value="{{space.password}}">
                 {{space.password}}
               </span>
               <a id="copy" class="link copy bl b--black f5 ph4 pv3 dib white bg-transparent bg-animate hover-bg-navy b"  href="javascript:void(0)">Copy</a>
@@ -60,7 +62,9 @@ layout: default
               <svg class="icon icon-md v-mid pr3">
                 <use xlink:href="#icon-unlock"></use>
               </svg>
-              No password
+              <span class="spaces-password">
+                No password
+              </span>
             {%endif%}
           </div>
 

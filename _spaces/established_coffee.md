@@ -5,7 +5,6 @@ type: "Coffee Shop"
 location: "Cathedral Quarter"
 speed: 2
 password:
-rating: 3
 opening_times:
   - day: Monday
     time: 7am-6pm

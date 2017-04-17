@@ -5,7 +5,6 @@ type: "Coffee Shop"
 location: "Castle Lane"
 speed: .5
 password:
-rating: 1
 opening_times:
   - day: Monday
     time: 630am-8pm

@@ -2535,7 +2535,7 @@ module.exports = function(text, pattern, options) {
 /***/ })
 /******/ ]);
 var options = {
-    valueNames: [ 'spaces-title', 'spaces-location','spaces-type','spaces-times',{name: 'spaces-speed', attr: 'data-speed'} ]
+    valueNames: [ 'spaces-title', 'spaces-location','spaces-type','spaces-times',{name: 'spaces-speed', attr: 'data-speed'}, 'spaces-password' ]
 };
 
 var spacesList = new List('spaces', options);
