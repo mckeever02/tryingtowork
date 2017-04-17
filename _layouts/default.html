@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>{{ page.title }}</title>
+        <title>{{ site.name }}</title>
         <meta name="description" content="{{site.description}}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -19,9 +19,9 @@
         </script>
         <!-- End Google Analytics -->
 
-        <!-- {% include criticalCSS.html %} -->
+        {% include criticalCSS.html %}
 
-        <link rel="stylesheet" href="css/main.css">
+        <!-- <link rel="stylesheet" href="css/main.css"> -->
 
         <style>
         .fonts-loaded .serif {
@@ -72,13 +72,16 @@
     <body class="bg-near-black white flex flex-column min-h-100">
 
       <header class="center ph3 ph5-ns tc pt4">
-        <h1 class="fw9 serif f1 f-5-m f-6-l lh-title mt0 mb3 transparent text-stroke">
+        <h1 class="fw9 serif f1 f-5-m f-6-l lh-title mt0 mb3 text-stroke">
           {{site.name}}
         </h1>
         <div class="measure center">
-          <h2 class="fw2 f5 lh-copy mt0 mb4 fw4">
+          <h2 class="fw2 f5 lh-copy mt0 fw4">
             {{site.description}}
           </h2>
+          <p class="pv2 f6 light-green">
+            <a class="link light-green link-underline hover-green" href="https://michael1018.typeform.com/to/A55afF" data-mode="popup" data-hide-headers=true data-hide-footer=true target="_blank">Submit a space</a><script>(function(){var qs,js,q,s,d=document,gi=d.getElementById,ce=d.createElement,gt=d.getElementsByTagName,id="typef_orm_share",b="https://s3-eu-west-1.amazonaws.com/share.typeform.com/";if(!gi.call(d,id)){js=ce.call(d,"script");js.id=id;js.src=b+"share.js";q=gt.call(d,"script")[0];q.parentNode.insertBefore(js,q)}})()</script>
+          </p>
         </div>
 
       </header>
@@ -93,7 +96,7 @@
           <ul class="list list-horizontal-disc f7 pa0 ma0 mb1 washed-blue">
             <li class="dib mv1">Made by <a class="link link-underline washed-blue hover-white" href="{{site.author_link}}">{{site.author}}</a></li>
             <li class="dib mv1">Built with Jekyll and Tachyons</li>
-            <li class="dib mv1"><a class="link link-underline washed-blue hover-white" href="#">View source</a> on Github</li>
+            <li class="dib mv1"><a class="link link-underline washed-blue hover-white" href="{{site.github_source}}">View source</a> on Github</li>
           </ul>
         </div>
 
@@ -101,7 +104,6 @@
         <!-- <script async defer src="js/list.js"></script>
         <script async defer src="js/clipboard.js"></script>
         <script async defer src="js/main.js"></script> -->
-
         <script async defer src="js/dist/scripts.min.js"></script>
       </footer>
 

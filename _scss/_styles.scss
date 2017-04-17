@@ -44,29 +44,32 @@ svg {
     height: 100%;
     border-radius: .125rem;
     border: 1px solid $black;
-    background-color: $dark-blue;
-  }
-  &:after {
-    top: .65em;
-    right: -.9em;
-    z-index: -2;
   }
   &:before {
     top: .3em;
     right: -.5em;
     z-index: -1;
+    background-color: darken($dark-blue,1%);
+  }
+  &:after {
+    top: .65em;
+    right: -.9em;
+    z-index: -2;
+    background-color: darken($dark-blue,2%);
+    
   }
 }
 
 .text-stroke {
-  -webkit-text-stroke: 1px $light-green;
-  &::selection {
-    color: $light-green;
-    background: transparent;
-    -webkit-text-stroke: 0;
-  }
+  color: $light-green;
   @media #{$breakpoint-large}{
+    color: transparent;
     -webkit-text-stroke: 2px $light-green;
+    &::selection {
+      color: $light-green;
+      background: transparent;
+      -webkit-text-stroke: 0;
+    }
   }
 }
 
