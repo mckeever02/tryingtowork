@@ -220,7 +220,13 @@
 .hover-bg-light-green:hover,
 .hover-bg-light-green:focus { background-color: $light-green; }
 .hover-bg-navy:hover,
-.hover-bg-navy:focus { background-color: $navy; }
+.hover-bg-navy:focus
+{
+  background-color: $navy;
+}
+.hover-bg-navy:active{
+  background-color: darken($navy,4%); 
+}
 .hover-bg-dark-blue:hover,
 .hover-bg-dark-blue:focus { background-color: $dark-blue; }
 .hover-bg-blue:hover,
