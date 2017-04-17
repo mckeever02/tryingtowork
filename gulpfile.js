@@ -53,12 +53,12 @@ gulp.task('sass', function () {
         }))
         .pipe(prefix(['last 15 versions', '> 1%', 'ie 8', 'ie 7'], { cascade: true }))
         .pipe(gulp.dest('_site/css'))
-        // .pipe(uncss({
-        //     html: ['*.html', '_includes/*.html','_layouts/*.html']
-        // }))
-        // .pipe(cleanCSS())
-        // .pipe(browserSync.reload({stream:true}))
-        // .pipe(gulp.dest('css'));
+        .pipe(uncss({
+            html: ['*.html', '_includes/*.html','_layouts/*.html']
+        }))
+        .pipe(cleanCSS())
+        .pipe(browserSync.reload({stream:true}))
+        .pipe(gulp.dest('css'));
 
 });
 
