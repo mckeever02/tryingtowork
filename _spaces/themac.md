@@ -3,7 +3,7 @@ title: The Mac
 date: 13/04/2017
 type: "Coffee Shop"
 location: "Cathedral Quarter"
-speed: 50
+speed: 1.5
 password: "themac"
 opening_times:
   - day: Monday
