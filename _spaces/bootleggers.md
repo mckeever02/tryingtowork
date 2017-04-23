@@ -2,6 +2,7 @@
 title: Bootleggers
 date: 21/04/2017
 type: "Bar"
+password: "bootleggers321"
 location: "Cathedral Quarter"
 speed: .27
 opening_times:
