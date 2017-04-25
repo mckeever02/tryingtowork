@@ -3,8 +3,8 @@ title: Established Coffee
 date: 14/04/2017
 type: "Coffee Shop"
 location: "Cathedral Quarter"
-speed: 2
-password:
+speed: 45
+password: "mostlyharmless"
 opening_times:
   - day: Monday
     time: 7am-6pm
