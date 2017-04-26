@@ -38,6 +38,7 @@
   "homepage": "https://github.com/shakyShane/jekyll-gulp-sass-browser-sync",
   "dependencies": {
     "clipboard": "^1.6.1",
+    "sw-toolbox": "^3.6.0",
     "tachyons-sass": "^4.7.1"
   }
 }
