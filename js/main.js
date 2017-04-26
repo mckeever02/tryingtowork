@@ -1,36 +1,113 @@
-var options = {
-    valueNames: [ 'spaces-title', 'spaces-location','spaces-type','spaces-times',{name: 'spaces-speed', attr: 'data-speed'}, 'spaces-password' ]
-};
+/*!
+ *
+ *  Web Starter Kit
+ *  Copyright 2015 Google Inc. All rights reserved.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *    https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License
+ *
+ */
+/* eslint-env browser */
+(function() {
+  'use strict';
 
-var spacesList = new List('spaces', options);
+  // Check to make sure service workers are supported in the current browser,
+  // and that the current page is accessed from a secure origin. Using a
+  // service worker from an insecure origin will trigger JS console errors. See
+  // http://www.chromium.org/Home/chromium-security/prefer-secure-origins-for-powerful-new-features
+  var isLocalhost = Boolean(window.location.hostname === 'localhost' ||
+      // [::1] is the IPv6 localhost address.
+      window.location.hostname === '[::1]' ||
+      // 127.0.0.1/8 is considered localhost for IPv4.
+      window.location.hostname.match(
+        /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
+      )
+    );
 
-//var clipboard = new Clipboard('.copy');
+  if ('serviceWorker' in navigator &&
+      (window.location.protocol === 'https:' || isLocalhost)) {
+    navigator.serviceWorker.register('service-worker.js')
+    .then(function(registration) {
+      // updatefound is fired if service-worker.js changes.
+      registration.onupdatefound = function() {
+        // updatefound is also fired the very first time the SW is installed,
+        // and there's no need to prompt for a reload at that point.
+        // So check here to see if the page is already controlled,
+        // i.e. whether there's an existing service worker.
+        if (navigator.serviceWorker.controller) {
+          // The updatefound event implies that registration.installing is set:
+          // https://slightlyoff.github.io/ServiceWorker/spec/service_worker/index.html#service-worker-container-updatefound-event
+          var installingWorker = registration.installing;
 
-var clipboard = new Clipboard('.copy', {
-  target: function(trigger) {
-      console.log(trigger.innerHTML = 'Copied');
-      return trigger.previousElementSibling;
-      //return document.getElementById('password')
-    }
-});
+          installingWorker.onstatechange = function() {
+            switch (installingWorker.state) {
+              case 'installed':
+                // At this point, the old content will have been purged and the
+                // fresh content will have been added to the cache.
+                // It's the perfect time to display a "New content is
+                // available; please refresh." message in the page's interface.
+                break;
 
-// new Clipboard('.copy', {
-//   target: function(trigger) {
-//       return trigger.closest('small');
-//     }
-// });
+              case 'redundant':
+                throw new Error('The installing ' +
+                                'service worker became redundant.');
 
-
-clipboard.on('success', function(e, el) {
-  //document.getElementById('copy').innerHTML = 'Copied';
-  // console.info('Action:', e.action);
-  //     console.info('Text:', e.text);
-  //     console.info('Trigger:', e.trigger);
-  //e.clearSelection();
-  //console.log(e.trigger.innerHTML);
-  var elems = document.getElementsByClassName('copy');
-  for (var i=0;i<elems.length;i+=1){
-    elems[i].innerHTML = 'Copy';
+              default:
+                // Ignore
+            }
+          };
+        }
+      };
+    }).catch(function(e) {
+      console.error('Error during service worker registration:', e);
+    });
   }
-  e.trigger.innerHTML = 'Copied'
-});
+
+  // Your custom JavaScript goes here
+  var options = {
+      valueNames: [ 'spaces-title', 'spaces-location','spaces-type','spaces-times',{name: 'spaces-speed', attr: 'data-speed'}, 'spaces-password' ]
+  };
+
+  var spacesList = new List('spaces', options);
+
+  //var clipboard = new Clipboard('.copy');
+
+  var clipboard = new Clipboard('.copy', {
+    target: function(trigger) {
+        console.log(trigger.innerHTML = 'Copied');
+        return trigger.previousElementSibling;
+        //return document.getElementById('password')
+      }
+  });
+
+  // new Clipboard('.copy', {
+  //   target: function(trigger) {
+  //       return trigger.closest('small');
+  //     }
+  // });
+
+
+  clipboard.on('success', function(e, el) {
+    //document.getElementById('copy').innerHTML = 'Copied';
+    // console.info('Action:', e.action);
+    //     console.info('Text:', e.text);
+    //     console.info('Trigger:', e.trigger);
+    //e.clearSelection();
+    //console.log(e.trigger.innerHTML);
+    var elems = document.getElementsByClassName('copy');
+    for (var i=0;i<elems.length;i+=1){
+      elems[i].innerHTML = 'Copy';
+    }
+    e.trigger.innerHTML = 'Copied'
+  });
+
+})();

@@ -19,6 +19,7 @@
     "gulp-sass": "^2.1.0",
     "gulp-uglify": "^2.1.2",
     "gulp-uncss": "^1.0.6",
+    "sw-precache": "^5.1.0",
     "tachyons": "^4.7.0"
   },
   "repository": {
