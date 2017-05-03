@@ -1,0 +1,19 @@
+---
+title: Cafe 31
+date: 03/05/2017
+type: "Cafe, Coffee Shop"
+password: "pollock31"
+location: "Cathedral Quarter"
+speed: 9
+opening_times:
+  - day: Tuesday
+    time: 11am-6pm
+  - day: Wednesday
+    time: 11am-6pm
+  - day: Thursday
+    time: 11am-6pm
+  - day: Friday
+    time: 11am-6pm
+  - day: Saturday
+    time: 12am-6pm
+---
