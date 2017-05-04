@@ -4,7 +4,7 @@ date: 13/04/2017
 type: "Coffee Shop"
 location: "Cathedral Quarter"
 speed: 1.5
-password: "themac"
+password: "themac1234"
 opening_times:
   - day: Monday
     time: 10am-7pm
