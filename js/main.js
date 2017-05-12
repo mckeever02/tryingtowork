@@ -33,19 +33,19 @@
       )
     );
 
-  if ('serviceWorker' in navigator &&
-      (window.location.protocol === 'https:' || isLocalhost)) {
-
-        console.log('CLIENT: service worker registration in progress.');
-    navigator.serviceWorker.register('service-worker.js').then(function() {
-      console.log('CLIENT: service worker registration complete.');
-    }, function() {
-      console.log('CLIENT: service worker registration failure.');
-
-    });
-  }  else {
-    console.log('CLIENT: service worker is not supported.');
-  }
+  // if ('serviceWorker' in navigator &&
+  //     (window.location.protocol === 'https:' || isLocalhost)) {
+  //
+  //       console.log('CLIENT: service worker registration in progress.');
+  //   navigator.serviceWorker.register('service-worker.js').then(function() {
+  //     console.log('CLIENT: service worker registration complete.');
+  //   }, function() {
+  //     console.log('CLIENT: service worker registration failure.');
+  //
+  //   });
+  // }  else {
+  //   console.log('CLIENT: service worker is not supported.');
+  // }
 
   // Your custom JavaScript goes here
   var options = {
