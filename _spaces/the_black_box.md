@@ -1,9 +1,9 @@
 ---
 title: The Black Box
-date: 14/04/2017
+date: 12/05/2017
 type: "Arts Venue"
 location: "Cathedral Quarter"
-speed:
+speed: 5
 password: BlackBoxVenue
 opening_times:
   - day: Wednesday
