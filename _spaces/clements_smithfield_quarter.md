@@ -3,7 +3,7 @@ title: Clements Café
 date: 12/05/2017
 type: "Coffee Shop"
 location: "Royal Avenue"
-speed: 1.7
+speed: 4.5
 password: clements
 opening_times:
   - day: Monday
