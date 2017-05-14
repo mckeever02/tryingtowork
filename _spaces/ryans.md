@@ -2,7 +2,6 @@
 title: Ryan's Bar & Grill
 date: 14/05/2017
 type: "Bar, Restaurant"
-password: ""
 location: "Lisburn Road"
 speed: 15
 opening_times:
