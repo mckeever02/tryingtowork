@@ -1,6 +1,6 @@
 ---
 title: Town Square
-date: 12/05/2017
+date: 15/05/2017
 type: "Coffee Shop"
 location: "Queens Quarter"
 speed: 2

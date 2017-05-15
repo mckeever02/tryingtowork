@@ -18,4 +18,6 @@ opening_times:
     time: 8am-5pm
   - day: Saturday
     time: 10am-5pm
+  - day: Sunday
+    time: Closed
 ---

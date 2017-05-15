@@ -6,6 +6,8 @@ password: "pollock31"
 location: "Cathedral Quarter"
 speed: 9
 opening_times:
+  - day: Monday
+    time: Closed
   - day: Tuesday
     time: 11am-6pm
   - day: Wednesday

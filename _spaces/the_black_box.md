@@ -6,6 +6,10 @@ location: "Cathedral Quarter"
 speed: 5
 password: BlackBoxVenue
 opening_times:
+  - day: Monday
+    time: Closed
+  - day: Tuesday
+    time: Closed
   - day: Wednesday
     time: 10am-11pm
   - day: Thursday

@@ -12,8 +12,8 @@ layout: default
   </div>
 
   <div class="flex flex-wrap mt4 mt5-ns ph3 mw6 mw10-ns center list">
-    {% assign sorted = (site.spaces | sort: 'date') | reverse %}
-    {% for space in sorted %}
+    {% assign spaces = (site.spaces | sort: 'date') | reverse %}
+    {% for space in spaces %}
       <div class="f-w-100 f-w-50-m f-w-33-l f-w-25-xl ph4-ns mb4 mb5-ns">
         <article class="spaces-item center br1 hidden ba b--black relative card-item bg-dark-blue">
           <div class="bg-navy white bb b--black br1 br--top mv0 pv2 pv3-ns ph3">
@@ -75,17 +75,16 @@ layout: default
             </svg>
             {% assign currentDay = site.time | date: '%A' %}
             {% for time in space.opening_times %}
-              {% if time.day contains currentDay %}
-                {%assign open = true%}
-                {%assign openingTimes = time.time%}
+              {% if time.day contains currentDay  %}
+                  {%if time.time contains "Closed" %}
+                  <strong class="spaces-times">Closed today&nbsp;</strong>
+                  {%else%}
+                    {%assign openingTimes = time.time%}
+                    <strong class="spaces-times">Open today&nbsp;</strong>
+                    {{openingTimes}}
+                  {%endif%}
               {%endif%}
             {%endfor%}
-
-            {% if open == true %}
-              <strong class="spaces-times">Open today&nbsp;</strong>    {{openingTimes}}
-            {%else %}
-              <strong class="spaces-times">Closed today&nbsp;</strong>
-            {%endif%}
           </div>
         </article>
       </div><!-- /space-item -->
