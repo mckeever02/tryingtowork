@@ -76,10 +76,10 @@ layout: default
             {% assign currentDay = site.time | date: '%A' %}
             {% for time in space.opening_times %}
               {% if time.day contains currentDay  %}
-                  {%if time.time contains "Closed" %}
+                  {%assign openingTimes = time.time%}
+                  {%if openingTimes contains "Closed" %}
                   <strong class="spaces-times">Closed today&nbsp;</strong>
                   {%else%}
-                    {%assign openingTimes = time.time%}
                     <strong class="spaces-times">Open today&nbsp;</strong>
                     {{openingTimes}}
                   {%endif%}
