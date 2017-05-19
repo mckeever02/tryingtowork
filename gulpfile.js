@@ -56,7 +56,7 @@ gulp.task('sass', function () {
         .pipe(uncss({
             html: ['*.html', '_includes/*.html','_layouts/*.html']
         }))
-        .pipe(cleanCSS())
+        //.pipe(cleanCSS())
         .pipe(browserSync.reload({stream:true}))
         .pipe(gulp.dest('css'));
 

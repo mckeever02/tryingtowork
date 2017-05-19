@@ -5,6 +5,8 @@ type: "Coffee Shop"
 location: "Cathedral Quarter"
 speed: 45
 password: "mostlyharmless"
+sockets: true
+socket_availability: "many"
 opening_times:
   - day: Monday
     time: 7am-6pm

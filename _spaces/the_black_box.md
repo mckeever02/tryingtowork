@@ -5,6 +5,8 @@ type: "Arts Venue"
 location: "Cathedral Quarter"
 speed: 5
 password: BlackBoxVenue
+sockets: true
+socket_availability: "some"
 opening_times:
   - day: Monday
     time: Closed

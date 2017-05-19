@@ -5,6 +5,8 @@ type: "Coffee Shop"
 location: "Queens Quarter"
 speed: 2
 password: BOTANIC!
+sockets: true
+socket_availability: "some"
 opening_times:
   - day: Monday
     time: 7am-10pm

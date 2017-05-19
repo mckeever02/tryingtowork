@@ -5,6 +5,8 @@ type: "Hotel, Bar, Lounge"
 location: "Cathedral Quarter"
 speed: 65
 password:
+sockets: true
+socket_availability: "some"
 opening_times:
   - day: Monday
     time: 7am-12pm

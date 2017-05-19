@@ -18,12 +18,40 @@ layout: default
         <article class="spaces-item center br1 hidden ba b--black relative card-item bg-dark-blue">
           <div class="bg-navy white bb b--black br1 br--top mv0 pv2 pv3-ns ph3">
             <h3 class="f3 f2-xl ma0 mb1 mt3 serif fw9 spaces-title">{{space.title}}</h3>
-            <ul class="list list-horizontal-disc tracked f7 ttu pa0 ma0 mb1">
-              <li class="dib mv1 spaces-type">{{space.type}}</li>
-              <li class="dib mv1 spaces-location">{{space.location}}</li>
-              <li class="dib mv1">
+            <ul class="list list-horizontal-disc f7 ttu pa0 ma0 mb1">
+              <li class="dib spaces-type tracked">{{space.type}}</li>
+              <li class="dib spaces-location tracked">{{space.location}}</li>
+              {% if space.sockets == true %}
+              <li class="dib list-item-icon relative">
+                <a href="javascript:void(0)" class="di tooltip-item">
+                  <svg class="icon {% if space.socket_availability == "some" %} white {%else%} light-green {%endif%} icon-md v-mid">
+                    <use xlink:href="#icon-plug-uk"></use>
+                  </svg>
+                  <div class="tooltip white lh-solid bg-dark-blue br2 pa2 tc ttn b absolute top-100 left-50 ba b--black z-2">
+                    {% if space.socket_availability == "some" %}
+                    Some sockets available
+                    {%else%}
+                    Many sockets available
+                    {%endif%}
+                  </div>
+                </a>
+              </li>
+              {%elsif space.sockets == false%}
+              <li class="dib list-item-icon relative">
+                <a href="javascript:void(0)" class="di tooltip-item">
+                  <svg class="icon washed-blue icon-md v-mid">
+                    <use xlink:href="#icon-plug-uk"></use>
+                  </svg>
+                  <div class="tooltip white lh-solid bg-dark-blue br2 pa2 tc ttn b absolute top-100 left-50 ba b--black z-2">
+                    No sockets available
+                  </div>
+                </a>
+              </li>
+              {%endif%}
+              <li class="dib list-item-icon">
                 {% include rating-system.html %}
               </li>
+
             </ul>
           </div>
           <div class="space-item-row flex pl3 items-center w-100 bb b--black">

@@ -56,7 +56,7 @@ svg {
     right: -.9em;
     z-index: -2;
     background-color: darken($dark-blue,2%);
-    
+
   }
 }
 
@@ -84,8 +84,8 @@ svg {
 }
 
 .icon-md {
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
 }
 
 .icon-sm {
@@ -112,16 +112,18 @@ input::placeholder {
 }
 
 .list-horizontal-disc {
-  li:not(:first-of-type)::before {
+  li:before {
     content: "\b7";
     padding-right: $spacing-small;
   }
+  li:first-of-type::before {
+    padding-right: 0;
+    content: "";
+  }
 }
 
-.spaces-item .list-horizontal-disc {
-  li:last-of-type::before {
-    padding-right: 0;
-  }
+.list-horizontal-disc li.list-item-icon:before {
+  padding-right: 0;
 }
 
 .input:focus {
@@ -140,4 +142,41 @@ input::placeholder {
 
 .link {
   outline: none;
+}
+
+.tooltip {
+  min-width: 160px;
+  margin-left: -240%;
+  margin-top: .8rem;
+  display: none;
+  &:before, &:after {
+    bottom: 100%;
+  	left: 50%;
+  	border: solid transparent;
+  	content: " ";
+  	height: 0;
+  	width: 0;
+  	position: absolute;
+  	pointer-events: none;
+  }
+  &:before {
+    border-color: rgba(194, 225, 245, 0);
+  	border-bottom-color: $black;
+  	border-width: 7px;
+  	margin-left: -7px;
+  }
+  &:after {
+    border-color: rgba(136, 183, 213, 0);
+  	border-bottom-color: $dark-blue;
+  	border-width: 6px;
+  	margin-left: -6px;
+  }
+}
+
+@media #{$breakpoint-not-small} {
+  .tooltip-item:hover, .tooltip-item:focus {
+    .tooltip {
+      display: block;
+    }
+  }
 }

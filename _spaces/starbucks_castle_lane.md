@@ -5,6 +5,8 @@ type: "Coffee Shop"
 location: "Castle Lane"
 speed: .5
 password:
+sockets: true
+socket_availability: "many"
 opening_times:
   - day: Monday
     time: 630am-8pm

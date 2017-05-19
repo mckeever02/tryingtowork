@@ -4,6 +4,7 @@ date: 14/05/2017
 type: "Bar, Restaurant"
 location: "Lisburn Road"
 speed: 15
+sockets: false
 opening_times:
   - day: Monday
     time: 12am-1am
