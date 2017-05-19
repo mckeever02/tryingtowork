@@ -1,10 +1,10 @@
 ---
 title: The National Grande Café
-date: 17/05/2017
+date: 19/05/2017
 type: "Café, Bar"
 password:
 location: "Cathedral Quarter"
-speed:
+speed: 5
 opening_times:
   - day: Monday
     time: 9am-1am
@@ -20,5 +20,4 @@ opening_times:
     time: 9am-1am
   - day: Sunday
     time: 9am-12am
-output: false
 ---

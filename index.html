@@ -17,7 +17,7 @@ layout: default
       <div class="f-w-100 f-w-50-m f-w-33-l f-w-25-xl ph4-ns mb4 mb5-ns">
         <article class="spaces-item center br1 hidden ba b--black relative card-item bg-dark-blue">
           <div class="bg-navy white bb b--black br1 br--top mv0 pv2 pv3-ns ph3">
-            <h3 class="f3 f2-xl ma0 mt3 serif fw9 spaces-title">{{space.title}}</h3>
+            <h3 class="f3 f2-xl ma0 mb2 mt3 serif fw9 spaces-title">{{space.title}}</h3>
             <ul class="list list-horizontal-disc tracked f7 ttu pa0 ma0 mb1">
               <li class="dib mv1 spaces-type">{{space.type}}</li>
               <li class="dib mv1 spaces-location">{{space.location}}</li>
@@ -51,7 +51,7 @@ layout: default
           </div>
 
           <div class="space-item-row flex pl3 items-center w-100 bb b--black">
-            {% if space.password %}
+            {% if space.password and space.password != "signup" %}
               <svg class="icon icon-md v-mid pr3">
                 <use xlink:href="#icon-lock"></use>
               </svg>
@@ -59,6 +59,13 @@ layout: default
                 {{space.password}}
               </span>
               <a id="copy" class="link copy bl b--black f5 ph4 pv3 dib white bg-transparent bg-animate hover-bg-navy b"  href="javascript:void(0)">Copy</a>
+              {% elsif space.password and space.password == "signup" %}
+              <svg class="icon icon-md v-mid pr3">
+                <use xlink:href="#icon-unlock"></use>
+              </svg>
+              <span class="spaces-password">
+                Sign-up required
+              </span>
               {% else %}
               <svg class="icon icon-md v-mid pr3">
                 <use xlink:href="#icon-unlock"></use>

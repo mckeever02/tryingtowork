@@ -1,9 +1,9 @@
 ---
 title: Bullit Hotel
-date: 18/04/2017
+date: 19/05/2017
 type: "Hotel, Bar, Lounge"
 location: "Cathedral Quarter"
-speed: 30
+speed: 65
 password:
 opening_times:
   - day: Monday

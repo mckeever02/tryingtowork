@@ -1,10 +1,10 @@
 ---
 title: McDonalds
-date: 17/05/2017
+date: 19/05/2017
 type: "Restaurant"
-password: "mcdonaldsvq22"
-location: "Victoria Quarter"
-speed: .6
+password:
+location: "Victoria Square"
+speed: 1.6
 opening_times:
   - day: Monday
     time: 9am-9pm
