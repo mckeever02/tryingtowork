@@ -5,6 +5,8 @@ type: "Cafe, Coffee Shop"
 password: "pollock31"
 location: "Cathedral Quarter"
 speed: 9
+sockets: true
+socket_availability: "some"
 opening_times:
   - day: Monday
     time: Closed
