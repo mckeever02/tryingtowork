@@ -3,6 +3,7 @@ title: Costa Coffee
 date: 19/05/2017
 type: "Coffee Shop"
 location: "Cityside"
+password: "signup"
 speed: 3
 sockets: true
 socket_availability: "many"

@@ -1,7 +1,7 @@
 ---
 title: Bullit Hotel
 date: 19/05/2017
-type: "Hotel, Bar, Lounge"
+type: "Bar, Lounge"
 location: "Cathedral Quarter"
 speed: 65
 password:
