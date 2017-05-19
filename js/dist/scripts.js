@@ -2585,7 +2585,7 @@ module.exports = function(text, pattern, options) {
 
   // Your custom JavaScript goes here
   var options = {
-      valueNames: [ 'spaces-title', 'spaces-location','spaces-type','spaces-times',{name: 'spaces-speed', attr: 'data-speed'}, 'spaces-password' ]
+      valueNames: [ 'spaces-title', 'spaces-location','spaces-type','spaces-times',{name: 'spaces-speed', attr: 'data-speed'}, 'spaces-password',{name: 'spaces-sockets', attr: 'data-sockets'} ]
   };
 
   var spacesList = new List('spaces', options);

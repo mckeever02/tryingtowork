@@ -24,7 +24,7 @@ layout: default
               {% if space.sockets == true %}
               <li class="dib list-item-icon relative">
                 <a href="javascript:void(0)" class="di tooltip-item">
-                  <svg class="icon {% if space.socket_availability == "some" %} white {%else%} light-green {%endif%} icon-md v-mid">
+                  <svg data-sockets="{%if space.socket_availability == 'some' %} Some plugs sockets available {%elsif space.socket_availability == 'many' %} Many plugs sockets available {%endif%}"  class="spaces-sockets icon {% if space.socket_availability == "some" %} white {%else%} light-green {%endif%} icon-md v-mid">
                     <use xlink:href="#icon-plug-uk"></use>
                   </svg>
                   <div class="tooltip white lh-solid bg-dark-blue br2 pa2 tc ttn b absolute top-100 left-50 ba b--black z-2">

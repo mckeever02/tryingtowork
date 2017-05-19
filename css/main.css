@@ -676,10 +676,6 @@ li {
   all cells will be equal width
 */
 
-@media screen and (min-width: 45em) {
-  .db-ns {
-    display: block; } }
-
 /*
 
   FLEXBOX
