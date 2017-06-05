@@ -1,5 +1,5 @@
 ---
-title: Roasted & toasted
+title: Roasted & Toasted
 date: 05/06/2017
 type: "Coffee Shop"
 location: "Queens Quarter"
