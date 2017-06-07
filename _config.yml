@@ -1,7 +1,7 @@
 name: Trying to work
 description: A collection of free spaces to work online around Belfast City Centre
 author: Michael
-author_link: "//michaelmckeever.co"
+author_link: "https://mckvr.com"
 github_source: "https://github.com/mckeever02/tryingtowork"
 markdown: redcarpet
 highlighter: rouge # or rouge or null
