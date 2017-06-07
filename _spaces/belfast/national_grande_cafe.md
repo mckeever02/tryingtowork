@@ -1,6 +1,7 @@
 ---
 title: The National Grande Café
 date: 19/05/2017
+city: Belfast
 type: "Café, Bar"
 password:
 location: "Cathedral Quarter"

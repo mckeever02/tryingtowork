@@ -1,6 +1,7 @@
 ---
 title: Ryan's Bar & Grill
 date: 14/05/2017
+city: Belfast
 type: "Bar, Restaurant"
 location: "Lisburn Road"
 speed: 15

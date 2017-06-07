@@ -1,6 +1,7 @@
 ---
 title: Costa Coffee
 date: 19/05/2017
+city: Belfast
 type: "Coffee Shop"
 location: "Cityside"
 password: "signup"

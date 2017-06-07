@@ -1,6 +1,7 @@
 ---
 title: Bullit Hotel
 date: 19/05/2017
+city: Belfast
 type: "Bar, Lounge"
 location: "Cathedral Quarter"
 speed: 65

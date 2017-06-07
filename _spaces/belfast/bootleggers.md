@@ -1,6 +1,7 @@
 ---
 title: Bootleggers
 date: 21/04/2017
+city: Belfast
 type: "Bar"
 password: "bootleggers321"
 location: "Cathedral Quarter"

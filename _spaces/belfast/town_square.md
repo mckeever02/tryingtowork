@@ -1,6 +1,7 @@
 ---
 title: Town Square
 date: 15/05/2017
+city: Belfast
 type: "Coffee Shop"
 location: "Queens Quarter"
 speed: 2

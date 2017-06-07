@@ -56,7 +56,26 @@ svg {
     right: -.9em;
     z-index: -2;
     background-color: darken($dark-blue,2%);
+  }
+}
 
+.button-group {
+  &:before {
+    content:"";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: .125rem;
+    border: 1px solid $black;
+  }
+  &:before {
+    top: .2em;
+    right: -.4em;
+    z-index: -1;
+    background-color: darken($dark-blue,1%);
+  }
+  .active {
+    background-color: lighten($navy, 2%);
   }
 }
 

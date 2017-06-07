@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>{{ site.name }} - Free spaces to work online in Belfast City Centre ⚡</title>
-        <meta name="description" content="{{site.description}}">
+        <title>{{ site.name }} - {{page.city}} City Centre ⚡</title>
+        <meta name="description" content="A collection of free spaces to work online around {{page.city}} City Centre">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
@@ -41,7 +41,7 @@
         <meta property="og:image" content="{{site.baseurl}}/og-image.png" />
 
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:site" content="@mick_mckeever" />
+        <meta name="twitter:site" content="@trying2work" />
         <meta name="twitter:title" content="{{site.name}}" />
         <meta name="twitter:description" content="{{site.description}}" />
         <meta name="twitter:image" content="{{site.baseurl}}/og-image.png" />
@@ -81,8 +81,6 @@
         <!-- End Google Analytics -->
 
         {% include criticalCSS.html %}
-
-        <!--<link rel="stylesheet" href="css/main.css">-->
 
         <style>
         .fonts-loaded .serif {
@@ -138,11 +136,16 @@
         </h1>
         <div class="measure center">
           <h2 class="fw2 f5 lh-copy mt0 fw4">
-            {{site.description}}
+            A collection of free spaces to work online around {{page.city}} city centre
           </h2>
-          <p class="pv2 f6 light-green">
+          <p class="pt2 pb0 mb0 f6 light-green">
             <a class="link light-green link-underline hover-green" href="https://michael1018.typeform.com/to/A55afF" data-mode="popup" data-hide-headers=true data-hide-footer=true>Submit a space</a>
           </p>
+
+          <div class="mv4 flex justify-around relative button-group">
+            <a class="link relative {%if page.city == 'Belfast'%} active {%else%} bg-dark-blue {%endif%} flex-auto bg-navy db bg-animate hover-bg-navy white pa3 br1 hidden ba b--black relative br1 br--left" href="/#Belfast">Belfast</a>
+            <a class="link relative {%if page.city == 'Dublin'%} active {%else%} bg-dark-blue {%endif%} flex-auto db bg-dark-blue bg-animate hover-bg-navy white pa3 br1 hidden ba b--black relative br1 br--right bl-0" href="/dublin">Dublin</a>
+          </div>
         </div>
 
       </header>
@@ -169,6 +172,8 @@
         <script async defer src="js/dist/scripts.min.js"></script>
         <script>(function(){var qs,js,q,s,d=document,gi=d.getElementById,ce=d.createElement,gt=d.getElementsByTagName,id="typef_orm_share",b="https://s3-eu-west-1.amazonaws.com/share.typeform.com/";if(!gi.call(d,id)){js=ce.call(d,"script");js.id=id;js.src=b+"share.js";q=gt.call(d,"script")[0];q.parentNode.insertBefore(js,q)}})()</script>
       </footer>
+
+      <link rel="stylesheet" href="css/main.css">
 
     </body>
 </html>

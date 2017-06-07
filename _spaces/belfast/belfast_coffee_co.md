@@ -1,6 +1,7 @@
 ---
 title: Belfast Coffee Co.
 date: 26/05/2017
+city: Belfast
 type: "Coffee Shop"
 location: "Cathedral Quarter"
 password: "belfast107"

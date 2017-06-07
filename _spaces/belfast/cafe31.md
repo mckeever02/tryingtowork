@@ -1,6 +1,7 @@
 ---
 title: Cafe 31
 date: 03/05/2017
+city: Belfast
 type: "Cafe, Coffee Shop"
 password: "pollock31"
 location: "Cathedral Quarter"

@@ -13,3 +13,5 @@ baseurl: https://tryingtowork.in
 
 collections:
 - spaces
+
+permalink: pretty

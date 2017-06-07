@@ -1,6 +1,7 @@
 ---
 title: McDonalds
 date: 19/05/2017
+city: Belfast
 type: "Restaurant"
 password:
 location: "Victoria Square"

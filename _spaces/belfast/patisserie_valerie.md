@@ -1,6 +1,7 @@
 ---
 title: Patisserie Valerie
 date: 19/05/2017
+city: Belfast
 type: "Bakery, Coffee Shop"
 location: "Castle Lane"
 speed: 1

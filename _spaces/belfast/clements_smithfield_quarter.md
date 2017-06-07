@@ -1,6 +1,7 @@
 ---
 title: Clements Café
 date: 12/05/2017
+city: Belfast
 type: "Coffee Shop"
 location: "Royal Avenue"
 speed: 4.5

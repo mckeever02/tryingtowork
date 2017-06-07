@@ -1,6 +1,7 @@
 ---
 title: Victoria Square
 date: 19/05/2017
+city: Belfast
 type: "Shopping Centre"
 password: "signup"
 location: "Victoria Square"

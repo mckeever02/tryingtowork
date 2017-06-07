@@ -1,6 +1,7 @@
 ---
 title: Farset Labs
 date: 26/05/2017
+city: Belfast
 type: "hackerspace"
 location: "Sandy Row"
 password: "signup"

@@ -1,6 +1,7 @@
 ---
 title: Guilt Trip
 date: 20/05/2017
+city: Belfast
 type: "Coffee Shop"
 password: "allthrillsnospills"
 location: "Knock"

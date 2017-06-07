@@ -1,6 +1,7 @@
 ---
 title: The Woodworkers
 date: 19/04/2017
+city: Belfast
 type: "Bar"
 location: "Queens Quarter"
 speed: 10

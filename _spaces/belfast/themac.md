@@ -1,25 +1,26 @@
 ---
-title: Established Coffee
-date: 25/04/2017
+title: The Mac
+date: 13/04/2017
+city: Belfast
 type: "Coffee Shop"
 location: "Cathedral Quarter"
-speed: 45
-password: "mostlyharmless"
+speed: 1.5
+password: "themac1234"
 sockets: true
 socket_availability: "many"
 opening_times:
   - day: Monday
-    time: 7am-6pm
+    time: 10am-7pm
   - day: Tuesday
-    time: 7am-6pm
+    time: 10am-7pm
   - day: Wednesday
-    time: 7am-6pm
+    time: 10am-7pm
   - day: Thursday
-    time: 7am-6pm
+    time: 10am-7pm
   - day: Friday
-    time: 7am-6pm
+    time: 10am-7pm
   - day: Saturday
-    time: 8am-6pm
+    time: 10am-7pm
   - day: Sunday
-    time: 9am-6pm
+    time: 10am-7pm
 ---
