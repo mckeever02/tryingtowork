@@ -9,7 +9,7 @@ exclude: ["node_modules", "gulpfile.js", "package.json"]
 
 twitter: //twitter.com/trying2work
 
-baseurl: https://tryingtowork.in
+website: https://tryingtowork.in
 
 collections:
 - spaces
