@@ -7,7 +7,7 @@ location: "Trinity College"
 password: "boiguest"
 speed: 5.4
 sockets: true
-socket_availability: "some"
+socket_availability: "many"
 opening_times:
   - day: Monday
     time: 8am-6pm
