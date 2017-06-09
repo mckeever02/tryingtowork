@@ -55,6 +55,7 @@ gulp.task('sass:styles', function () {
         }))
         .pipe(prefix(['last 15 versions', '> 1%', 'ie 8', 'ie 7'], { cascade: true }))
         .pipe(gulp.dest('_site/css'))
+        .pipe(cleanCSS())
         .pipe(uncss({
             html: ['*.html', '_includes/*.html','_layouts/*.html']
         }))
