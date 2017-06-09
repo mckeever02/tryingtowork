@@ -1,5 +1,5 @@
 ---
-title: Dolce Silicy
+title: Dolce Sicily
 date: 09/06/2017
 city: Dublin
 type: "Cafe"
