@@ -80,8 +80,6 @@
         </script>
         <!-- End Google Analytics -->
 
-        {% include criticalCSS.html %}
-
         <style>
         .fonts-loaded .serif {
           font-family: 'Tiempos Headline',
@@ -90,6 +88,24 @@
                        serif;
         }
         </style>
+
+        <meta name="fullcss"  content="{{ "/css/main.css" | prepend: site.baseurl }}">
+
+
+        {% include enhanceJS-min.html  %}
+
+        <!--#if expr="$HTTP_COOKIE=/fullcss\=true/" -->
+
+        <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}?{{site.time | date: '%s%N'}}">
+
+        <!--#else -->
+
+        {% include criticalCSS.html %}
+
+        <!--#endif -->
+        <noscript>
+          <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}?{{site.time | date: '%s%N'}}">
+        </noscript>
 
         <script>
         /* include loadJS library */
@@ -143,8 +159,10 @@
           </p>
 
           <div class="mv4 flex justify-around relative button-group">
-            <a class="link relative b {%if page.city == 'Belfast'%} active {%else%} bg-dark-blue {%endif%} flex-auto bg-navy db bg-animate hover-bg-navy white pa3 br1 hidden ba b--black relative br1 br--left" href="/#Belfast">Belfast</a>
-            <a class="link relative b {%if page.city == 'Dublin'%} active {%else%} bg-dark-blue {%endif%} flex-auto db bg-dark-blue bg-animate hover-bg-navy white pa3 br1 hidden ba b--black relative br1 br--right bl-0" href="/dublin">Dublin</a>
+            <a class="link relative b {%if page.city == 'Belfast'%} active white {%else%} white-30 bg-dark-blue {%endif%} flex-auto bg-navy db bg-animate hover-white pa3 br1 hidden ba b--black relative br1 br--left" href="/#Belfast">
+              Belfast
+            </a>
+            <a class="link relative b {%if page.city == 'Dublin'%} active white {%else%} white-30 bg-dark-blue {%endif%} flex-auto db bg-dark-blue bg-animate hover-white pa3 br1 hidden ba b--black relative br1 br--right bl-0" href="/dublin">Dublin</a>
           </div>
         </div>
 
@@ -169,11 +187,9 @@
         <!-- <script async defer src="js/list.js"></script>
         <script async defer src="js/clipboard.js"></script>
         <script async defer src="js/main.js"></script> -->
-        <script async defer src="{{site.baseurl}}/js/dist/scripts.min.js"></script>
+        <script async src="{{site.baseurl}}/js/dist/scripts.min.js"></script>
         <script>(function(){var qs,js,q,s,d=document,gi=d.getElementById,ce=d.createElement,gt=d.getElementsByTagName,id="typef_orm_share",b="https://s3-eu-west-1.amazonaws.com/share.typeform.com/";if(!gi.call(d,id)){js=ce.call(d,"script");js.id=id;js.src=b+"share.js";q=gt.call(d,"script")[0];q.parentNode.insertBefore(js,q)}})()</script>
       </footer>
-
-      <link rel="stylesheet" href="{{site.baseurl}}/css/main.css">
 
     </body>
 </html>

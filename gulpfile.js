@@ -55,11 +55,6 @@ gulp.task('sass:styles', function () {
         }))
         .pipe(prefix(['last 15 versions', '> 1%', 'ie 8', 'ie 7'], { cascade: true }))
         .pipe(gulp.dest('_site/css'))
-        .pipe(cleanCSS())
-        .pipe(uncss({
-            html: ['*.html', '_includes/*.html','_layouts/*.html']
-        }))
-        //.pipe(cleanCSS())
         .pipe(browserSync.reload({stream:true}))
         .pipe(gulp.dest('css'));
 
@@ -81,6 +76,16 @@ gulp.task('sass:critical', function() {
     .pipe(gulp.dest('_includes/'));
     });
 
+gulp.task('uncss', function() {
+  return gulp.src('css/main.css')
+    .pipe(gulp.dest('_site/css'))
+    .pipe(uncss({
+      html: ['*.html', '_includes/*.html','_layouts/*.html']
+    }))
+    .pipe(browserSync.reload({stream:true}))
+    .pipe(gulp.dest('css'));
+});
+
 /**
  * Watch scss files for changes & recompile
  * Watch html/md files, run jekyll & reload BrowserSync
@@ -101,6 +106,15 @@ return gulp.src(jsFiles)
     .pipe(rename('scripts.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest(jsDest));
+});
+
+gulp.task('enhanceJS', function() {
+  return gulp.src('_includes/enhanceJS.html')
+    .pipe(uglify())
+    .pipe(concat.header('<script>'))
+    .pipe(concat.footer('</script>'))
+    .pipe(rename('enhanceJS-min.html'))
+    .pipe(gulp.dest('_includes/'));
 });
 
 gulp.task('generate-service-worker', function(callback) {
