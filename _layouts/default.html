@@ -89,23 +89,13 @@
         }
         </style>
 
-        <meta name="fullcss"  content="{{ "/css/main.css" | prepend: site.baseurl }}">
+        <link rel="preload" href="{{ "/css/main.css" | prepend: site.baseurl }}" as "style" onload="this.rel='stylesheet'">
 
-
-        {% include enhanceJS-min.html  %}
-
-        <!--#if expr="$HTTP_COOKIE=/fullcss\=true/" -->
-
-        <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}?{{site.time | date: '%s%N'}}">
-
-        <!--#else -->
+        <noscript>
+          <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">
+        </noscript>
 
         {% include criticalCSS.html %}
-
-        <!--#endif -->
-        <noscript>
-          <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}?{{site.time | date: '%s%N'}}">
-        </noscript>
 
         <script>
         /* include loadJS library */
