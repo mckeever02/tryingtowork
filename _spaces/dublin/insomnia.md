@@ -4,7 +4,7 @@ date: 30/06/2017
 city: Dublin
 type: "Coffee Shop"
 location: "Trinity"
-password: signup
+password:
 speed: 5.7
 opening_times:
   - day: Monday
