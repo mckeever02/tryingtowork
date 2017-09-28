@@ -54,6 +54,7 @@ gulp.task('sass:styles', function () {
             onError: browserSync.notify
         }))
         .pipe(prefix(['last 15 versions', '> 1%', 'ie 8', 'ie 7'], { cascade: true }))
+        .pipe(cleanCSS())
         .pipe(gulp.dest('_site/css'))
         .pipe(browserSync.reload({stream:true}))
         .pipe(gulp.dest('css'));
@@ -79,6 +80,7 @@ gulp.task('sass:critical', function() {
 gulp.task('uncss', function() {
   return gulp.src('css/main.css')
     .pipe(gulp.dest('_site/css'))
+    .pipe(cleanCSS())
     .pipe(uncss({
       html: ['*.html', '_includes/*.html','_layouts/*.html']
     }))

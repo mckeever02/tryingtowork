@@ -133,10 +133,10 @@ input::placeholder {
 .list-horizontal-disc {
   li:before {
     content: "\b7";
-    padding-right: $spacing-small;
+    margin-right: $spacing-small;
   }
   li:first-of-type::before {
-    padding-right: 0;
+    margin-right: 0;
     content: "";
   }
 }

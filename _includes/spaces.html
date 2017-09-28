@@ -10,7 +10,7 @@
             <li class="dib spaces-location tracked">{{space.location}}</li>
             {% if space.sockets == true %}
             <li class="dib list-item-icon relative">
-              <a href="javascript:void(0)" class="di tooltip-item">
+              <a href="javascript:void(0)" class="dib tooltip-item">
                 <svg data-sockets="{%if space.socket_availability == 'some' %} Some plugs sockets available {%elsif space.socket_availability == 'many' %} Many plugs sockets available {%endif%}"  class="spaces-sockets icon {% if space.socket_availability == "some" %} white {%else%} light-green {%endif%} icon-md v-mid">
                   <use xlink:href="#icon-plug-uk"></use>
                 </svg>
@@ -25,7 +25,7 @@
             </li>
             {%elsif space.sockets == false%}
             <li class="dib list-item-icon relative">
-              <a href="javascript:void(0)" class="di tooltip-item">
+              <a href="javascript:void(0)" class="dib tooltip-item">
                 <svg class="icon washed-blue icon-md v-mid">
                   <use xlink:href="#icon-plug-uk"></use>
                 </svg>
