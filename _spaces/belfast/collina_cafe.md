@@ -4,6 +4,7 @@ date: 12/10/2017
 city: Belfast
 type: "Café, Bar, Restaurant"
 location: "Newton Park"
+password: "signup"
 speed: 33
 sockets: many
 opening_times:
