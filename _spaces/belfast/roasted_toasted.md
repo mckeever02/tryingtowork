@@ -1,11 +1,11 @@
 ---
 title: Roasted & Toasted
-date: 05/06/2017
+date: 11/11/2017
 city: Belfast
-type: "Coffee Shop"
+type: "Coffee Shop, Café"
 location: "Queens Quarter"
 password: "streetfood44"
-speed: 21
+speed: 300
 sockets: true
 socket_availability: "many"
 opening_times:
