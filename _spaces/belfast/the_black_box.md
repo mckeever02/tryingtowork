@@ -4,7 +4,7 @@ date: 12/05/2017
 city: Belfast
 type: "Arts Venue"
 location: "Cathedral Quarter"
-speed: 5
+speed: 13
 password: BlackBoxVenue
 sockets: true
 socket_availability: "some"
