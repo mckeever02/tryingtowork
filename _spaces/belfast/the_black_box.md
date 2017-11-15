@@ -1,6 +1,6 @@
 ---
 title: The Black Box
-date: 12/05/2017
+date: 15/11/2017
 city: Belfast
 type: "Arts Venue"
 location: "Cathedral Quarter"
