@@ -1,0 +1,114 @@
+<div id="{{page.city}}" class="flex flex-wrap mt4 ph3 mw6 mw10-ns center list">
+  {% assign spaces = site.spaces | sort: 'date' | where: "city", {{page.city}}) | reverse %}
+  {% for space in spaces %}
+    <div class="f-w-100 f-w-50-m f-w-33-l f-w-25-xl ph4-ns mb4 mb5-ns">
+      <article class="spaces-item center br1 hidden ba b--black relative card-item bg-dark-blue">
+        <div class="bg-navy white bb b--black br1 br--top mv0 pv2 pv3-ns ph3">
+          <h3 class="f3 f2-xl ma0 mb1 mt3 serif fw9 spaces-title">{{space.title}}</h3>
+          <ul class="list list-horizontal-disc f7 ttu pa0 ma0 mb1">
+            <li class="dib spaces-type tracked">{{space.type}}</li>
+            <li class="dib spaces-location tracked">{{space.location}}</li>
+            {% if space.sockets == true %}
+            <li class="dib list-item-icon relative">
+              <a href="javascript:void(0)" class="dib tooltip-item">
+                <svg data-sockets="{%if space.socket_availability == 'some' %} Some plugs sockets available {%elsif space.socket_availability == 'many' %} Many plugs sockets available {%endif%}"  class="spaces-sockets icon {% if space.socket_availability == "some" %} white {%else%} light-green {%endif%} icon-md v-mid">
+                  <use xlink:href="#icon-plug-uk"></use>
+                </svg>
+                <div class="tooltip white lh-solid bg-dark-blue br2 pa2 tc ttn b absolute top-100 left-50 ba b--black z-2">
+                  {% if space.socket_availability == "some" %}
+                  Some sockets available
+                  {%else%}
+                  Many sockets available
+                  {%endif%}
+                </div>
+              </a>
+            </li>
+            {%elsif space.sockets == false%}
+            <li class="dib list-item-icon relative">
+              <a href="javascript:void(0)" class="dib tooltip-item">
+                <svg class="icon washed-blue icon-md v-mid">
+                  <use xlink:href="#icon-plug-uk"></use>
+                </svg>
+                <div class="tooltip white lh-solid bg-dark-blue br2 pa2 tc ttn b absolute top-100 left-50 ba b--black z-2">
+                  No sockets available
+                </div>
+              </a>
+            </li>
+            {%endif%}
+            <li class="dib list-item-icon">
+              {% include rating-system.html %}
+            </li>
+
+          </ul>
+        </div>
+        <div class="space-item-row flex pl3 items-center w-100 bb b--black">
+          <svg class="icon icon-md v-mid pr3">
+            <use xlink:href="#icon-bolt"></use>
+          </svg>
+          {% if space.speed <= 1 and space.speed <= 1.9 %}
+          <span class="red spaces-speed" data-speed="slow wifi speed">
+          {%elsif space.speed >= 2 and space.speed <= 19 %}
+          <span class="orange spaces-speed" data-speed="medium wifi speed">
+          {%elsif space.speed >= 20 %}
+          <span class="green spaces-speed" data-speed="fast wifi speed">
+          {% else %}
+          <span class="red spaces-speed" data-speed="No wifi">
+          {%endif%}
+            {% if space.speed >= 0.1 %}
+            {{space.speed}}Mbps
+            {% else %}
+            Not working
+            {%endif%}
+          </span>
+          <span class="db washed-blue mlauto dib fr ttu f7 fw6 tracked pr3 truncate">
+            updated: {{space.date | date: "%d&middot;%m&middot;%Y"}}
+          </span>
+        </div>
+
+        <div class="space-item-row flex pl3 items-center w-100 bb b--black">
+          {% if space.password and space.password != "signup" %}
+            <svg class="icon icon-md v-mid pr3">
+              <use xlink:href="#icon-lock"></use>
+            </svg>
+            <span class="password mrauto truncate spaces-password" id="password" value="{{space.password}}">
+              {{space.password}}
+            </span>
+            <a id="copy" class="link copy bl b--black f5 ph4 pv3 dib white bg-transparent bg-animate hover-bg-navy b"  href="javascript:void(0)">Copy</a>
+            {% elsif space.password and space.password == "signup" %}
+            <svg class="icon icon-md v-mid pr3">
+              <use xlink:href="#icon-unlock"></use>
+            </svg>
+            <span class="spaces-password">
+              Sign-up required
+            </span>
+            {% else %}
+            <svg class="icon icon-md v-mid pr3">
+              <use xlink:href="#icon-unlock"></use>
+            </svg>
+            <span class="spaces-password">
+              No password
+            </span>
+          {%endif%}
+        </div>
+
+        <div class="space-item-row flex pl3 items-center w-100 b--black">
+          <svg class="icon icon-md v-mid pr3">
+            <use xlink:href="#icon-clock"></use>
+          </svg>
+          {% assign currentDay = site.time | date: '%A' %}
+          {% for time in space.opening_times %}
+            {% if time.day contains currentDay  %}
+                {%assign openingTimes = time.time%}
+                {%if openingTimes contains "Closed" %}
+                <strong class="spaces-times">Closed today&nbsp;</strong>
+                {%else%}
+                  <strong class="spaces-times">Open today&nbsp;</strong>
+                  {{openingTimes}}
+                {%endif%}
+            {%endif%}
+          {%endfor%}
+        </div>
+      </article>
+    </div><!-- /space-item -->
+  {%endfor%}
+</div>

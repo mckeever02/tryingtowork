@@ -1,0 +1,24 @@
+name: Trying to work
+description: A collection of free spaces to work online around European City Centres
+author: Michael
+author_link: "https://mckvr.com"
+github_source: "https://github.com/mckeever02/tryingtowork"
+markdown: redcarpet
+highlighter: rouge # or rouge or null
+exclude: ["node_modules", "gulpfile.js", "package.json"]
+
+twitter: //twitter.com/trying2work
+
+website: https://tryingtowork.in
+
+baseurl: https://tryingtowork.in
+
+
+collections:
+- spaces
+
+permalink: pretty
+
+# Gems
+gems:
+- jekyll-sitemap
