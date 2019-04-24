@@ -12,7 +12,9 @@ import Space from "./space"
 import Cities from './cities';
 import {colors} from './theme'
 import { StaticQuery, graphql } from "gatsby"
-import Travolta from '../images/lost.gif'
+import TravoltaGif from '../images/lost.gif'
+import TravoltaWebp from '../images/lost.webp'
+
 
 
 const SpacesWrapper = styled('section')`
@@ -274,7 +276,11 @@ export default class Spaces extends React.Component {
 								<EmptyState className="fadeIn">
 									<ImgContainer>
 									<ImgBlend />
-									<img src={Travolta} alt="No results" />
+									<picture>
+										<source srcset={TravoltaWebp} type="image/webp" />
+										<source srcset={TravoltaGif} type="image/gif" />
+										<img src={TravoltaGif} alt="No results" />
+									</picture>
 									</ImgContainer>
 									<EmptyStateContent>
 										<h3>Sorry, no results.</h3>

@@ -11,7 +11,9 @@ import Icon from './icon';
 import TextInput from './textInput';
 import Button from './button';
 import successGif from '../images/success.gif';
+import successWebp from '../images/success.webp';
 import errorGif from '../images/error.gif';
+import errorWebp from '../images/error.webp';
 
 
 const MAPBOX_TOKEN = process.env.GATSBY_MAPBOX_API_KEY
@@ -627,9 +629,17 @@ export default class Form extends React.Component {
                       <ImgOverlay />
                         <ImgBlend />
                         {formSuccess ?
-                        <img src={successGif} alt="Form submission success" />
+                          <picture>
+                            {/* <source srcset={successWebp} type="image/webp" /> */}
+                            <source srcset={successGif} type="image/gif" />
+                            <img src={successGif} alt="Form submission success" />
+                          </picture>
                         :
-                        <img src={errorGif} alt="Form submission error" />
+                          <picture>
+                            <source srcset={errorWebp} type="image/webp" />
+                            <source srcset={errorGif} type="image/gif" />
+                            <img src={errorGif} alt="Form submission error" />
+                          </picture>
                         }
                       </BgImg>
                       <FormSubmittedText>
