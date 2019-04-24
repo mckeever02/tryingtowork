@@ -1,0 +1,6 @@
+@font-face {
+  font-family: 'Tiempos Headline';
+  src: url('./static/fonts/tiemposheadlineweb-black.woff2') format('woff2'), url('./static/fonts/tiemposheadlineweb-black.woff') format('woff');
+  font-style: normal;
+  font-weight: 900;
+}

@@ -1,0 +1,281 @@
+//@import 'scss/normalize.scss';
+
+@font-face {
+  font-family: 'Tiempos Headline';
+  src: url('../fonts/tiemposheadlineweb-black.woff2') format('woff2'), url('../fonts/tiemposheadlineweb-black.woff') format('woff');
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Fira Mono';
+  src: url('../fonts/FiraMono-Regular.woff2') format('woff2'), url('../fonts/FiraMono-Regular.woff') format('woff');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Fira Mono';
+  src: url('../fonts/FiraMono-Bold.woff2') format('woff2'), url('../fonts/FiraMono-Bold.woff') format('woff');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tiempos Headline';
+  src: url('../fonts/tiemposheadlineweb-black.woff2') format('woff2'), url('../fonts/tiemposheadlineweb-black.woff') format('woff');
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+}
+
+$black: #0A0B10;
+$water-leaf: #87f7dd;
+$comet: #55577a;
+$green: #44fea5;
+$green-dark: #34c360;
+$orange: #f26532;
+$red: #f8395e;
+$yellow: #F4B63F;
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+*, :before, :after {
+  box-sizing: border-box;
+}
+
+.text-green {
+  color: $green;
+}
+
+.text-green-dark {
+  color: $green-dark;
+}
+
+.text-red {
+  color: $red;
+}
+
+.text-orange {
+  color: $orange;
+}
+
+.text-water-leaf {
+  color: $water-leaf;
+}
+
+.text-comet {
+  color: $comet;
+}
+
+.text-white {
+  color: #ffffff;
+}
+
+.text-yellow {
+  color: $yellow;
+}
+
+@keyframes pulsate {
+  0% {
+    transform: scale(0.1, 0.1);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  40%, 100% {
+    transform: scale(1.2, 1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes bounce {
+  0% {
+    opacity: 0;
+    transform: translateY(-1000px) rotate(-45deg);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(10px) rotate(-45deg);
+  }
+  80% {
+    transform: translateY(-5px) rotate(-45deg);
+  }
+  100% {
+    transform: translateY(0) rotate(-45deg);
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 100%;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInFromBottom {
+  0% {
+    transform: translateY(15rem);
+  }
+  80% {
+    transform: translateY(-1rem);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideFadeOut {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(.5rem);
+    opacity: 0;
+  }
+}
+
+@keyframes slideFadeIn {
+  0% {
+    transform: translateY(-1rem);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slideInFromBottom {
+  animation-name: slideInFromBottom;
+  animation-duration: .3s;
+  animation-delay: 1.5s;
+  animation-fill-mode: both;
+}
+
+.slideFadeOut {
+  animation-name: slideFadeOut;
+  animation-delay: 5s;
+  animation-fill-mode: forwards;
+  animation-duration: .6s;
+}
+
+.slideFadeIn {
+  animation-name: slideFadeIn;
+  animation-fill-mode: forwards;
+  animation-duration: .6s;
+}
+
+.fadeIn {
+  animation-name: fadeIn;
+  animation-duration: .6s;
+  animation-fill-mode: both;
+  animation-timing-function: ease;
+}
+
+
+.scaleIn {
+  animation-name: scaleIn;
+  animation-duration: .6s;
+  animation-delay: .5s;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.95, 0.05, 0.795, 0.035);
+}
+
+.show {
+  visibility: visible;
+}
+
+.hide {
+  visibility: hidden;
+}
+
+.bounceDown {
+  animation-name: bounce;
+  animation-fill-mode: both;
+  animation-duration: .4s;
+}
+
+$modal-transition: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+
+.ReactModal__Overlay {
+    opacity: 0;
+    z-index: 999;
+    transition: all 600ms ease;
+    #ModalDialog {
+      opacity: 0;
+      transition: all 600ms $modal-transition;
+      transform: scale(0.8);
+    }
+    &--after-open{
+      opacity: 1;
+      #ModalDialog {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    &--before-close{
+      opacity: 0;
+      #ModalDialog {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+    }
+}
+
+.transition-base {
+  transition: all .2s ease;
+}
+
+.icon {
+  fill: currentColor;
+  width: 1rem;
+  height: 1rem;
+  &-lg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  &-xl {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  &-xxl {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+a {
+  color: $water-leaf;
+  &:hover, &:focus {
+    color: darken($water-leaf, 10%);
+  }
+}
+
+::-moz-selection {
+  background: $water-leaf;
+  // color: $black;
+}
+::selection {
+  background: $water-leaf;
+  // color: $black;
+}
