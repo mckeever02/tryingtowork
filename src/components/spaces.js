@@ -19,10 +19,11 @@ import TravoltaWebp from '../images/lost.webp'
 
 const SpacesWrapper = styled('section')`
 	${tw`flex flex-wrap mt-6 sm:mt-12 mx-auto`}
+	max-width: 1900px;
 `
 
 const SpaceWrapper = styled('div')`
-	${tw`w-full lg:w-1/2 xl:w-1/3 xxl:w-1/4 mb-6`}
+	${tw`w-full lg:w-1/2 xl:w-1/3 mb-6`}
 `
 
 const EmptyState = styled('div')`

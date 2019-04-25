@@ -12,7 +12,7 @@ module.exports = {
     title: `Trying to work`,
     description: `Find spaces to work online`,
     author: `Michael Mckeever`,
-    siteUrl: `https://tryingtowork.netlify.com`,
+    siteUrl: `https://tryingtowork.in`,
     image: `/images/og-image-2.png`,
     social: {
       twitter: `trying2work`,
