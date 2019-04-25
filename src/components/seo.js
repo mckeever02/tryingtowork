@@ -17,7 +17,7 @@ function SEO({ description, lang, meta, keywords, title, image, metaTitle }) {
             htmlAttributes={{
               lang,
             }}
-            defaultTitle="Trying to work | Find spaces to work online"
+            defaultTitle="Trying to work | Find spaces to work remotely"
             title={title}
             titleTemplate={`%s | ${data.site.siteMetadata.title}`}
           >
@@ -25,7 +25,7 @@ function SEO({ description, lang, meta, keywords, title, image, metaTitle }) {
             <meta property="image" content={image} />
             {/* Open Graph / Facebook */}
             <meta property="og:type" content="website" />
-            <meta property="og:title" content={metaTitle || title || data.site.siteMetadata.title} />
+            <meta property="og:title" content={metaTitle || data.site.siteMetadata.title} />
             <meta property="og:description" content={metaDescription} />
             <meta property="og:image" content={image} />
             <meta property="og:url" content={data.site.siteMetadata.siteUrl} />

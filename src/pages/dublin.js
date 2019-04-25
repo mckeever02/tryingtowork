@@ -32,7 +32,7 @@ export default class Dublin extends React.Component {
 
     return (
       <Layout>
-			<SEO title={"Spaces to work in "+this.state.selectedValue} metaTitle={"Spaces to work in "+this.state.selectedValue | "Trying to work"} keywords={[`${this.state.selectedValue}`, `digital nomad`, `co-working`, `online freelance`]} />
+			<SEO title={"Spaces to work in "+this.state.selectedValue} metaTitle={"Spaces to work online in "+this.state.selectedValue+" | Trying to work"} description={"Find spaces to work online in " +this.state.selectedValue+ ". For freelancers, remote workers and digital nomads."} />
 
 			<PageTitle title="Trying to work" description={"Find spaces to work online in "+this.state.selectedValue+ " City Centre"}  />
 
