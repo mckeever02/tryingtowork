@@ -22,7 +22,7 @@ class BlogIndex extends React.Component {
       <Layout>
         <SEO
           title="The Blog"
-          description="The Trying to work blog brings you the best places to work remotely in Belfast, Dublin and London."
+          description="The Trying to work blog brings you the best places to work online in Belfast, Dublin and London."
         />
 
         <PageTitle title="The Blog" />

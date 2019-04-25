@@ -17,7 +17,7 @@ function SEO({ description, lang, meta, keywords, title, image, metaTitle }) {
             htmlAttributes={{
               lang,
             }}
-            defaultTitle="Trying to work | Find spaces to work remotely"
+            defaultTitle="Trying to work | Find spaces to work online"
             title={title}
             titleTemplate={`%s | ${data.site.siteMetadata.title}`}
           >
