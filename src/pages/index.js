@@ -31,15 +31,13 @@ export default class Index extends React.Component {
   render() {
 
     return (
-	 <>
-	   <SEO titleTemplate={`%s | Find spaces to work online`} description="Find spaces to work online in Belfast, Dublin, and London city centre. For freelancers, remote workers and digital nomads" />
       <Layout>
+		 <SEO titleTemplate={`%s | Find spaces to work online`} title="Trying to work" description="Find spaces to work online in Belfast, Dublin, and London city centre. For freelancers, remote workers and digital nomads" />
 		<PageTitle title="Trying to work" description={"Find spaces to work online in "+this.state.selectedValue+ " City Centre"}  />
 
 		<Spaces data={this.props.data.allGoogleSheetSpacesRow} />
 
       </Layout>
-	  </>
     )
   }
 }

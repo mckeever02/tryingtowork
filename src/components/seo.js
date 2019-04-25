@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 import Helmet from "react-helmet"
 import { StaticQuery, graphql } from "gatsby"
 
-function SEO({ description, lang, meta, keywords, title, image }) {
+function SEO({ description, lang, meta, keywords, title, image, metaTitle }) {
   return (
     <StaticQuery
       query={detailsQuery}
@@ -25,15 +25,15 @@ function SEO({ description, lang, meta, keywords, title, image }) {
             <meta property="image" content={image} />
             {/* Open Graph / Facebook */}
             <meta property="og:type" content="website" />
-            <meta property="og:title" content={title} />
+            <meta property="og:title" content={metaTitle || title || data.site.siteMetadata.title} />
             <meta property="og:description" content={metaDescription} />
             <meta property="og:image" content={image} />
             <meta property="og:url" content={data.site.siteMetadata.siteUrl} />
             {/* Twitter */}
             <meta property="twitter:card" content="summary_large_image" />
             <meta property="twitter:url" content={data.site.siteMetadata.siteUrl} />
-            <meta property="twitter:title" content={title} />
-            <meta name="twitter:text:title" content={title} />
+            <meta property="twitter:title" content={title || data.site.siteMetadata.title} />
+            <meta name="twitter:text:title" content={title || data.site.siteMetadata.title} />
             <meta property="twitter:site" content="@tryingtowork" />
             <meta property="twitter:description" content={metaDescription} />
             <meta property="twitter:image" content={image} />

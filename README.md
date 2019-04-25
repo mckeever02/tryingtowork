@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/234526c3-e1a1-406e-9015-d14690b87289/deploy-status)](https://app.netlify.com/sites/tryingtowork/deploys)
+
 Trying to work
 =============================
 
