@@ -20,7 +20,7 @@ function SEO({ description, lang, meta, keywords, title, image }) {
             defaultTitle="Trying to work | Find spaces to work online"
             title={title}
             titleTemplate={`%s | ${data.site.siteMetadata.title}`}
-          > <meta name="twitter:text:title" content={title} />
+          >
             <meta property="description" content={metaDescription} />
             <meta property="image" content={image} />
             {/* Open Graph / Facebook */}
@@ -33,6 +33,7 @@ function SEO({ description, lang, meta, keywords, title, image }) {
             <meta property="twitter:card" content="summary_large_image" />
             <meta property="twitter:url" content={data.site.siteMetadata.siteUrl} />
             <meta property="twitter:title" content={title} />
+            <meta name="twitter:text:title" content={title} />
             <meta property="twitter:site" content="@tryingtowork" />
             <meta property="twitter:description" content={metaDescription} />
             <meta property="twitter:image" content={image} />
