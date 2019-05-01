@@ -322,7 +322,8 @@ const BgImg = styled('div')`
   }
 `
 const Picture = styled('picture')`
-  ${`w-full h-full`}
+  width: 100%!important;
+  height: 100%!important;
 `
 
 export default class Form extends React.Component {
