@@ -316,13 +316,13 @@ const ImgOverlay = styled('div')`
 
 const BgImg = styled('div')`
   ${tw`pin-t pin-l w-full h-full absolute overflow-hidden object-cover flex justify-center items-center`}
-  picture {
-    ${`w-full h-full`}
-  }
   img {
     ${tw`w-full object-cover`}
     filter: grayscale(100%);
   }
+`
+const Picture = styled('picture')`
+  ${`w-full h-full`}
 `
 
 export default class Form extends React.Component {
@@ -632,17 +632,17 @@ export default class Form extends React.Component {
                       <ImgOverlay />
                         <ImgBlend />
                         {formSuccess ?
-                          <picture>
+                          <Picture>
                             {/* <source srcset={successWebp} type="image/webp" /> */}
                             <source srcset={successGif} type="image/gif" />
                             <img src={successGif} alt="Form submission success" />
-                          </picture>
+                          </Picture>
                         :
-                          <picture>
+                          <Picture>
                             <source srcset={errorWebp} type="image/webp" />
                             <source srcset={errorGif} type="image/gif" />
                             <img src={errorGif} alt="Form submission error" />
-                          </picture>
+                          </Picture>
                         }
                       </BgImg>
                       <FormSubmittedText>
