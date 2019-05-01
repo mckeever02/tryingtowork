@@ -316,8 +316,8 @@ const ImgOverlay = styled('div')`
 
 const BgImg = styled('div')`
   ${tw`pin-t pin-l w-full h-full absolute overflow-hidden object-cover flex justify-center items-center`}
-  picture, img {
-    ${`w-full object-cover`}
+  picture {
+    ${`w-full h-full`}
   }
   img {
     ${tw`w-full object-cover`}
