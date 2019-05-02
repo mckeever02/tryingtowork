@@ -188,7 +188,7 @@ module.exports = {
           short_name: `ttw`,
           start_url: `/`,
           background_color: `#1C1E2C`,
-          theme_color: `#87f7dd`,
+          theme_color: `#1C1E2C`,
           display: `standalone`,
           icon: `src/images/icon.png`, // This path is relative to the root of the site.
         },
