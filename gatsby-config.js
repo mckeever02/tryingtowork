@@ -198,6 +198,7 @@ module.exports = {
     `gatsby-plugin-emotion`,
     `gatsby-plugin-netlify`,
     `gatsby-plugin-sass`,
+    `gatsby-plugin-sitemap`,
     {
       resolve: 'gatsby-plugin-web-font-loader',
       options: {
