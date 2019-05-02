@@ -34,7 +34,7 @@ const Navigation = styled('nav')`
       ${tw`hidden md:block md:ml-auto px-7`}
     }
     :last-of-type {
-      ${tw`w-full md:w-auto mt-5 md:mt-0`}
+      ${tw`w-full md:w-auto mt-8 md:mt-0`}
     }
   }
   a {

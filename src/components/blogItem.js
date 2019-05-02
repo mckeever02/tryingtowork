@@ -26,14 +26,14 @@ const ArticleWrapper = styled('div')`
     }
 `
 const Article = styled('article')`
-  ${tw`flex relative overflow-hidden z-10 flex-row border border-solid border-black rounded-sm bg-steel-gray rounded-sm`}
+  ${tw`flex relative overflow-hidden z-10 flex-col md:flex-row border border-solid border-black rounded-sm bg-steel-gray rounded-sm`}
   min-height: 450px;
   p {
-    ${tw`text-lg leading-normal text-comet-lighter mb-auto`}
+    ${tw`text-base md:text-lg leading-normal text-comet-lighter mb-auto`}
   }
 `
 const ImgWrapper = styled(Link)`
-    ${tw`w-1/2 relative block border-solid bg-mirage overflow-hidden border-black border-t-0 border-l-0 border-r-default border-b-0`}
+    ${tw`w-full md:w-1/2 relative block border-solid bg-mirage overflow-hidden border-black border-t-0 border-l-0 border-r-default border-b-0`}
     .gatsby-image-wrapper {
       ${tw`h-full`}
     }
@@ -53,7 +53,7 @@ const ImgContainer = styled('div')`
 
 
 const ContentWrapper = styled('div')`
-    ${tw`w-1/2 p-10 flex flex-col`}
+    ${tw`w-full md:w-1/2 p-5 md:p-10 flex flex-col`}
 `
 
 const ImgBlend = styled('div')`
@@ -74,7 +74,7 @@ const ArticleTitle = styled('h2')`
 `
 
 const ArticleLink = styled(Link)`
-    ${tw`text-white no-underline flex items-center`}
+    ${tw`text-white no-underline flex items-center mt-5`}
     .icon {
       transition: transform .2s ease;
       ${tw`relative`}

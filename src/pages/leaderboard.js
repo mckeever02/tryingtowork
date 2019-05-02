@@ -55,7 +55,7 @@ export default class Leaderboard extends React.Component {
         }
     `
     const Leaderboard = styled('div')`
-        ${tw`flex flex-col max-w-md mx-auto px-5`}
+        ${tw`flex flex-col max-w-md mx-auto sm:px-5`}
     `
 
     const LeaderboardItem = styled('a')`
