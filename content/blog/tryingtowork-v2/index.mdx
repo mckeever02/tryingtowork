@@ -12,9 +12,38 @@ featuredImage: "./featured-image.jpg"
 
 <IntroParagraph>
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla egestas gravida odio et blandit. Nullam aliquet odio in urna lacinia aliquet. Mauris aliquet magna hendrerit lacus convallis, eu sollicitudin lectus molestie. Etiam accumsan est sit amet velit elementum, at hendrerit neque lobortis. Nunc tincidunt et urna tincidunt imperdiet.
+Trying to work originally launched in 2017 as a way of finding free spaces to work online in Belfast and Dublin. Surprisingly, it was very well received and reached a fairly large audience.
 
 </IntroParagraph>
+
+## The problems
+
+Whilst well received, there were some issues with the original app. It was built in Jekyll, and there was no back-end present. This meant that users couldn’t submit spaces to the site themselves. Instead, they were asked to fill out a form with details of the space. The submission would be sent to myself and I would then add the new space to the site in the form of a markdown file. This was great for performance but bad for user experience.
+
+This led to spaces rarely being submitted and therefore, the app fell into obscurity, with new spaces only occasionally being added by myself.
+
+## Rebuilding from the ground up
+
+To solve these problems, I decided to do a complete rebuild of the app, choosing react and Gatsby as my stack. I still wanted to keep the site static for performance reasons, but going with Gatsby gave me a lot more control over how I could handle the data.
+
+That’s not to say that Jekyll couldn’t do anything that V2 can do now, it definitely could. Part of the reason however for choosing Gatsby and react was giving myself an opportunity to learn these new technologies at my own pace.
+
+## So what’s new?
+
+### Submit spaces
+Probably the biggest new feature is you can now submit a space and it will add to the site automatically! No more having to manually add it myself. This ended up taking a lot more work and time than I had anticipated so I hope you like the experience!
+
+### Filter spaces
+Something that was missing but always intended for v1 was the ability to filter spaces based on various parameters. Well for v2, its here! You can now filter by speed, sockets, a high google rating and even distance.
+
+### Leaderboard
+To try and create a bit more incentive for submitting spaces,  I’ve now added a leaderboard for the top submitters. Secure your place at the top by submitting spaces from around your city.
+
+### Blog
+To try and make this site more than just a collection of spaces to work online, I’ve also started a blog to bring you curated posts of the best spaces to work in your city, new spaces reviews, top co-working spots and much more.
+
+## Got ideas, found a bug or have a question?
+Shoot me an email, DM or drop a comment below. I’d be happy to help. Hope you like the new digs!
 
 ![Trying to work logo animated](./bolt.gif)
 
