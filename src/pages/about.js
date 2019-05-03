@@ -53,7 +53,7 @@ export default class About extends React.Component {
 
             <h2>Have a question?</h2>
 
-            <p>Came across any bugs? Have any suggestions on how I can improve this site? Or just want to talk to me? You can send me a <a href="//twitter.com/mmckvr">DM on Twitter</a>, <a href="mailto:michael@mckvr.com">email me</a> or <a href="#">open an issue on Github</a>.</p>
+          <p>Came across any bugs? Have any suggestions on how I can improve this site? Or just want to talk to me? You can send me a <a href="//twitter.com/mmckvr">DM on Twitter</a>, <a href="mailto:michael@mckvr.com">email me</a> or <a href="https://github.com/mckeever02/tryingtowork">open an issue on Github</a>.</p>
 
             <h2>Colophon</h2>
 
