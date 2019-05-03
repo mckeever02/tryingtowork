@@ -3,8 +3,8 @@
 Trying to work
 =============================
 
-![alt text](https://raw.githubusercontent.com/mckeever02/tryingtowork/master/static/images/og-image-2.png)
+![Trying to Work](https://raw.githubusercontent.com/mckeever02/tryingtowork/master/static/images/og-image-2.png)
 
-A collection of spaces to work online in Belfast, Dublin and London. With more Citites to follow.
+A collection of spaces to work online in Belfast, Dublin and London. With more cities to follow.
 
 Any ideas to make it better or bugs to report? [Tweet me](https://twitter.com/mmckvr) or [email me](mailto:michael@mckvr.com).
