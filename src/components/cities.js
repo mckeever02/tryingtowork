@@ -12,12 +12,12 @@ const ButtongroupWrapper = styled('div')`
 
 const Button = styled(Link)`
 	${tw`relative rounded-sm bg-steel-gray block flex-auto text-center cursor-pointer no-underline`}
-	transition: .2s ease;
+	transition: all .2s ease;
 	border: 1px solid ${colors.woodSmoke};
 	span {
 		${tw`relative z-20 rounded-sm bg-steel-gray text-sm sm:text-base text-comet-light block py-4 sm:py-5 flex-auto text-center`}
 		border: 1px solid transparent;
-		transition: .2s ease;
+		transition: all .2s ease;
 	}
 	:hover {
 		${tw`bg-ebony-clay`}
@@ -26,14 +26,14 @@ const Button = styled(Link)`
 		}
 	}
 	&.active {
-		${tw`text-white font-bold`}
+		${tw`font-bold bg-white`}
 		span {
-			${tw`bg-ebony-clay rounded-sm block text-white relative`}
+			${tw`bg-white rounded-sm block text-black relative`}
 			border: 1px solid ${colors.woodSmoke};
 			transform: translate(5px, -5px);
 		}
 		:hover {
-			${tw`bg-steel-gray`}
+			${tw`bg-water-leaf-dark`}
 		}
 	}
 	:first-of-type {
