@@ -512,7 +512,7 @@ export default class Form extends React.Component {
         let label = suggestion.label;
         label = label.substring(label.indexOf(",") + 1);
         let location = label.substring(0, label.indexOf(','));
-        let city = label.substring(label.indexOf(",") + 1);
+        let city = label.substring(label.indexOf(",") + 1).trim();
         city = city.substring(0, city.indexOf(','));
 
 
