@@ -6,11 +6,11 @@ import Spaces from '../components/spaces';
 import PageTitle from '../components/pageTitle';
 
 
-export default class Nottingham extends React.Component {
+export default class Edinburgh extends React.Component {
 	constructor(props) {
         super(props);
         this.state = {
-			selectedValue: "Nottingham",
+			selectedValue: "Edinburgh",
 		};
 	}
 
@@ -29,7 +29,7 @@ export default class Nottingham extends React.Component {
       <Layout>
 			<SEO title={"Spaces to work in "+this.state.selectedValue} metaTitle={"Spaces to work online in "+this.state.selectedValue+" | Trying to work"} description={"Find spaces to work online in " +this.state.selectedValue+ ". For freelancers, remote workers and digital nomads."} />
 
-			<PageTitle title="Trying to work" description={"Find spaces to work online in " + this.state.selectedValue + " City Centre"} />
+			<PageTitle title="Trying to work" description={"Find spaces to work online in "+this.state.selectedValue+ " City Centre"}  />
 
 			<Spaces data={this.props.data.allGoogleSheetSpacesRow} />
       </Layout>
@@ -38,8 +38,8 @@ export default class Nottingham extends React.Component {
 }
 
 export const query = graphql`
-	query Nottingham {
-		allGoogleSheetSpacesRow(filter: { city: {eq: "Nottingham" }}) {
+	query Edinburgh {
+		allGoogleSheetSpacesRow(filter: { city: {eq: "Edinburgh" }}) {
 			edges {
 				node {
 					id

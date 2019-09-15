@@ -7,13 +7,16 @@ import {Link} from 'gatsby'
 
 
 const ButtongroupWrapper = styled('div')`
-	${tw`sm:px-4 mx-auto max-w-md mb-6 mt-4`}
+	${tw`sm:px-4 mx-auto lg:max-w-lg mb-6 mt-3 py-4`}
+	overflow: auto;
+	-webkit-overflow-scrolling: auto;
 `
 
 const Button = styled(Link)`
 	${tw`relative rounded-sm bg-steel-gray block flex-auto text-center cursor-pointer no-underline`}
 	transition: all .2s ease;
 	border: 1px solid ${colors.woodSmoke};
+	min-width: 130px;
 	span {
 		${tw`relative z-20 rounded-sm bg-steel-gray text-sm sm:text-base text-comet-light block py-4 sm:py-5 flex-auto text-center`}
 		border: 1px solid transparent;
@@ -37,21 +40,25 @@ const Button = styled(Link)`
 		}
 	}
 	:first-of-type {
-		${tw`rounded-r-none z-40`}
+		${tw`rounded-r-none z-50`}
 		border-top-right-radius: 0;
 		border-bottom-right-radius: 0;
 	}
 	:nth-of-type(2) {
-		${tw`z-30`}
+		${tw`z-40`}
 		left: -2px!important;
 	}
 	:nth-of-type(3) {
-		${tw`z-20`}
+		${tw`z-30`}
 		left: -3px!important;
 	}
 	:nth-of-type(4) {
-		${tw`z-10`}
+		${tw`z-20`}
 		left: -4px!important;
+	}
+	:nth-of-type(5) {
+		${tw`z-10`}
+		left: -5px!important;
 	}
 	:last-of-type {
 		${tw`rounded-l-none`}
