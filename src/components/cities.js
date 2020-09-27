@@ -45,20 +45,24 @@ const Button = styled(Link)`
 		border-bottom-right-radius: 0;
 	}
 	:nth-of-type(2) {
-		${tw`z-40`}
+		${tw`z-50`}
 		left: -2px!important;
 	}
 	:nth-of-type(3) {
-		${tw`z-30`}
+		${tw`z-40`}
 		left: -3px!important;
 	}
 	:nth-of-type(4) {
-		${tw`z-20`}
+		${tw`z-30`}
 		left: -4px!important;
 	}
 	:nth-of-type(5) {
-		${tw`z-10`}
+		${tw`z-20`}
 		left: -5px!important;
+	}
+	:nth-of-type(6) {
+		${tw`z-10`}
+		left: -6px!important;
 	}
 	:last-of-type {
 		${tw`rounded-l-none`}
