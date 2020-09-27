@@ -51,6 +51,10 @@ module.exports = {
       {
         name: 'Edinburgh',
         link: '/edinburgh'
+      },
+      {
+        name: 'Madrid',
+        link: '/madrid'
       }
     ]
   },
