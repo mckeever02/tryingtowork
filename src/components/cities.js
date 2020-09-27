@@ -40,7 +40,7 @@ const Button = styled(Link)`
 		}
 	}
 	:first-of-type {
-		${tw`rounded-r-none z-50`}
+		${tw`rounded-r-none z-60`}
 		border-top-right-radius: 0;
 		border-bottom-right-radius: 0;
 	}
