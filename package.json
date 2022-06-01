@@ -67,7 +67,7 @@
     "react-star-rating-component": "^1.4.1",
     "react-toggle": "^4.0.2",
     "sass": "^1.17.2",
-    "sharp": "^0.22.0",
+    "sharp": "^0.30.5",
     "source-map-explorer": "^1.8.0",
     "tailwindcss": "^0.7.4",
     "webfontloader": "^1.6.28"
