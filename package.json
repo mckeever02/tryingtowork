@@ -46,7 +46,7 @@
     "intersection-observer": "^0.5.1",
     "mdx-utils": "^0.0.2",
     "netlify-lambda": "^1.4.3",
-    "node-fetch": "^2.3.0",
+    "node-fetch": "^2.6.7",
     "node-sass": "^4.11.0",
     "postcss-cli": "^6.1.2",
     "prism-react-renderer": "^0.1.5",
