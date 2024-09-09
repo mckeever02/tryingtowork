@@ -1,0 +1,150 @@
+---
+const apiKey = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY;
+---
+
+<div id="cafeList">Locating you and searching for cafes, restaurants, and bars...</div>
+<div id="errorMessage" style="display: none; color: red;"></div>
+
+<script is:inline define:vars={{ apiKey }}>
+  let map;
+  window.initCafes = function() {
+    const cafeList = document.getElementById('cafeList');
+    const errorMessage = document.getElementById('errorMessage');
+    
+    if (!google || !google.maps || !google.maps.places) {
+      showError("Failed to load Google Maps API. Please check your API key and ensure the Places API is enabled.");
+      return;
+    }
+
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        console.log(`Location obtained: ${lat}, ${lng}`);
+        searchNearby(lat, lng);
+      }, function(error) {
+        console.error("Error getting location:", error.message);
+        showError("Couldn't get your location. Please ensure location services are enabled in your browser.");
+      });
+    } else {
+      showError("Geolocation is not supported by your browser.");
+    }
+  }
+
+  function searchNearby(lat, lng) {
+    console.log(`Searching for places near ${lat}, ${lng}`);
+    const service = new google.maps.places.PlacesService(document.createElement('div'));
+    
+    const request = {
+      location: new google.maps.LatLng(lat, lng),
+      radius: '1000', // Search within 1000 meters
+      type: ['cafe'] // Include all three types
+    };
+
+    service.nearbySearch(request, (results, status) => {
+      console.log(`Nearby search status: ${status}`);
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        const filteredPlaces = results.filter(place => 
+          place.rating && 
+          (place.types.includes('cafe') || place.types.includes('restaurant') || place.types.includes('bar')) &&
+          !place.types.includes('gas_station') &&
+          !place.types.includes('department_store') &&
+          !place.types.includes('car_wash')
+        );
+        console.log(`Found ${filteredPlaces.length} suitable places out of ${results.length} total`);
+        if (filteredPlaces.length > 0) {
+          getPlaceDetails(service, filteredPlaces);
+        } else {
+          showError("No suitable places found in the area.");
+        }
+      } else {
+        showError(`Failed to load places. Status: ${status}`);
+      }
+    });
+  }
+
+  function getPlaceDetails(service, places) {
+    let completedRequests = 0;
+    const placeDetails = [];
+
+    places.forEach((place, index) => {
+      const request = {
+        placeId: place.place_id,
+        fields: ['name', 'rating', 'formatted_address', 'photo', 'type', 'review', 'place_id']
+      };
+
+      service.getDetails(request, (placeResult, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          placeDetails[index] = placeResult;
+        } else {
+          console.error(`Error fetching details for ${place.name}: ${status}`);
+          placeDetails[index] = place; // Use the original place data if details fetch fails
+        }
+
+        completedRequests++;
+        if (completedRequests === places.length) {
+          displayPlaces(placeDetails);
+        }
+      });
+    });
+  }
+
+  function displayPlaces(places) {
+    const cafeList = document.getElementById('cafeList');
+    cafeList.innerHTML = '<ul>' + 
+      places.map(place => `
+        <li>
+          <h3>${place.name}</h3>
+          ${place.photos && place.photos.length > 0 
+            ? `<img src="${place.photos[0].getUrl({maxWidth: 200, maxHeight: 200})}" alt="${place.name}">`
+            : ''}
+          <p>Address: ${place.formatted_address || place.vicinity}</p>
+          <p>Rating: ${place.rating.toFixed(1)} ⭐</p>
+          <p>Types: ${place.types.join(', ')}</p>
+          <p>Place ID: ${place.place_id}</p>
+          <p><a href="https://www.google.com/maps/place/?q=place_id:${place.place_id}" target="_blank">View on Google Maps</a></p>
+          ${place.reviews ? displayReviews(place.reviews) : ''}
+        </li>
+      `).join('') +
+      '</ul>';
+  }
+
+  function displayReviews(reviews) {
+    return `
+      <h4>Reviews:</h4>
+      <ul>
+        ${reviews.slice(0, 3).map(review => `
+          <li>
+            <p><strong>${review.author_name}</strong> - ${review.rating} ⭐</p>
+            <p>${review.text.length > 100 ? review.text.substring(0, 100) + '...' : review.text}</p>
+          </li>
+        `).join('')}
+      </ul>
+    `;
+  }
+
+  function showError(message) {
+    const errorMessage = document.getElementById('errorMessage');
+    errorMessage.textContent = message;
+    errorMessage.style.display = 'block';
+    document.getElementById('cafeList').style.display = 'none';
+    console.error('Error:', message);
+  }
+
+  function loadGoogleMapsScript() {
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initCafes`;
+    script.async = true;
+    script.defer = true;
+    script.onerror = (error) => {
+      showError(`Failed to load Google Maps API. Error: ${error.message}`);
+      console.error('Script load error:', error);
+    };
+    window.gm_authFailure = () => {
+      showError('Google Maps authentication failed. Please check your API key.');
+    };
+    document.head.appendChild(script);
+  }
+
+  loadGoogleMapsScript();
+</script>
