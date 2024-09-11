@@ -5,14 +5,24 @@ import FilterBar from './FilterBar';
 
 export default function Places() {
   const [userLocation, setUserLocation] = useState(null);
-  const { places, loading, error } = usePlaces(userLocation);
+  const [fallbackLocation, setFallbackLocation] = useState(null);
+  const [isUsingFallback, setIsUsingFallback] = useState(false);
+  const { places, loading, error } = usePlaces(userLocation || fallbackLocation);
   const [filters, setFilters] = useState({ name: '', rating: '', distance: '' });
 
   useEffect(() => {
     console.log('Attempting to get user location');
+    let geolocationTimeout;
+
     if (navigator.geolocation) {
+      geolocationTimeout = setTimeout(() => {
+        console.log('Geolocation timed out, using fallback');
+        getFallbackLocation();
+      }, 5000); // 5 second timeout
+
       navigator.geolocation.getCurrentPosition(
         position => {
+          clearTimeout(geolocationTimeout);
           console.log('User location obtained:', position.coords);
           setUserLocation({
             lat: position.coords.latitude,
@@ -20,29 +30,42 @@ export default function Places() {
           });
         },
         (error) => {
+          clearTimeout(geolocationTimeout);
           console.error("Error: The Geolocation service failed.", error);
+          getFallbackLocation();
         }
       );
     } else {
       console.error("Error: Your browser doesn't support geolocation.");
+      getFallbackLocation();
     }
+
+    return () => clearTimeout(geolocationTimeout);
   }, []);
 
-  useEffect(() => {
-    console.log('Places received from usePlaces:', places);
-  }, [places]);
+  const getFallbackLocation = async () => {
+    try {
+      const response = await fetch('https://ipapi.co/json/');
+      const data = await response.json();
+      console.log('Fallback location obtained:', data);
+      setFallbackLocation({
+        lat: data.latitude,
+        lng: data.longitude
+      });
+      setIsUsingFallback(true);
+    } catch (error) {
+      console.error('Error getting fallback location:', error);
+    }
+  };
 
   const handleFilterChange = (filterType, value) => {
-    console.log(`Filter changed: ${filterType} = ${value}`);
-    setFilters(prevFilters => {
-      const newFilters = { ...prevFilters, [filterType]: value };
-      console.log('New filters:', newFilters);
-      return newFilters;
-    });
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      [filterType]: value
+    }));
   };
 
   const filteredPlaces = useMemo(() => {
-    console.log('Filtering places with filters:', filters);
     return places.filter(place => {
       const nameMatch = place.name.toLowerCase().includes(filters.name.toLowerCase());
       const ratingMatch = filters.rating ? place.rating >= parseFloat(filters.rating) : true;
@@ -51,14 +74,17 @@ export default function Places() {
     });
   }, [places, filters]);
 
-  console.log('Places component rendering. All Places:', places.length, 'Filtered Places:', filteredPlaces.length);
-
-  if (!userLocation) return <p>Obtaining your location...</p>;
+  if (!userLocation && !fallbackLocation) return <p>Obtaining your location...</p>;
   if (loading) return <p>Loading places...</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (
     <div>
+      {isUsingFallback && (
+        <p className="text-yellow-600 mb-4">
+          Using approximate location. Enable geolocation for more accurate results.
+        </p>
+      )}
       <FilterBar onFilterChange={handleFilterChange} />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredPlaces.length > 0 ? (
