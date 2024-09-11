@@ -1,0 +1,202 @@
+---
+const apiKey = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY;
+---
+
+<script define:vars={{ apiKey }}>
+  let userLocation;
+  let allPlaces = [];
+
+  window.initCafes = function() {
+    const cafeList = document.getElementById('cafeList');
+  const errorMessage = document.getElementById('errorMessage');
+
+  if (!google || !google.maps || !google.maps.places) {
+    showError("Failed to load Google Maps API. Please check your API key and ensure the Places API is enabled.");
+  return;
+    }
+
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      userLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      console.log(`Location obtained: ${userLocation.lat()}, ${userLocation.lng()}`);
+      searchNearby(userLocation);
+    }, function (error) {
+      console.error("Error getting location:", error.message);
+      showError("Couldn't get your location. Please ensure location services are enabled in your browser.");
+    });
+    } else {
+    showError("Geolocation is not supported by your browser.");
+    }
+  }
+
+  function searchNearby(location, pageToken = null) {
+    console.log(`Searching for cafes near ${location.lat()}, ${location.lng()}`);
+  const service = new google.maps.places.PlacesService(document.createElement('div'));
+
+  const request = {
+    location: location,
+  radius: '10000', // Search within 10000 meters
+  type: ['cafe'], // Only search for cafes
+  pageToken: pageToken
+    };
+
+    service.nearbySearch(request, (results, status, pagination) => {
+    console.log(`Nearby search status: ${status}`);
+  if (status === google.maps.places.PlacesServiceStatus.OK) {
+    console.log(`Total cafes found in this page: ${results.length}`);
+        const filteredPlaces = results.filter(place => place.rating && place.types.includes('cafe'));
+  allPlaces = allPlaces.concat(filteredPlaces);
+  console.log(`Total filtered cafes so far: ${allPlaces.length}`);
+
+  // If there's a next page and we haven't reached the maximum (60 results)
+  if (pagination && pagination.hasNextPage && allPlaces.length < 60) {
+    setTimeout(() => searchNearby(location, pagination.nextPage), 2000); // 2 second delay
+        } else {
+    // We've got all results, now process them
+    processAndDisplayPlaces(location, allPlaces);
+        }
+      } else {
+    showError(`Failed to load cafes. Status: ${status}`);
+      }
+    });
+  }
+
+  function processAndDisplayPlaces(location, places) {
+    console.log(`Processing ${places.length} cafes`);
+
+    // Remove duplicates based on place_id
+    const uniquePlaces = Array.from(new Map(places.map(place => [place.place_id, place])).values());
+  console.log(`Unique cafes: ${uniquePlaces.length}`);
+
+  // Add distance and calculate score for each place
+  const maxDistance = 10000; // 10km
+    uniquePlaces.forEach(place => {
+    place.distance = google.maps.geometry.spherical.computeDistanceBetween(location, place.geometry.location);
+  // Normalize distance (0-1 where 0 is farthest and 1 is closest)
+  const normalizedDistance = 1 - (place.distance / maxDistance);
+  // Normalize rating (0-1 where 0 is lowest and 1 is highest)
+  const normalizedRating = place.rating / 5;
+  // Calculate score (50% weight on distance, 50% on rating)
+  place.score = (normalizedDistance * 0.5) + (normalizedRating * 0.5);
+    });
+
+    // Sort places by score (descending)
+    uniquePlaces.sort((a, b) => b.score - a.score);
+
+  // Process the filtered and sorted places
+  getPlaceDetails(new google.maps.places.PlacesService(document.createElement('div')), uniquePlaces);
+  }
+
+  function getPlaceDetails(service, places) {
+    console.log(`Getting details for ${places.length} cafes`);
+  let completedRequests = 0;
+  const placeDetails = [];
+
+    places.forEach((place, index) => {
+      const request = {
+    placeId: place.place_id,
+  fields: ['name', 'rating', 'vicinity', 'photo', 'type', 'review', 'place_id']
+      };
+
+      service.getDetails(request, (placeResult, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+    placeDetails[index] = { ...placeResult, distance: place.distance, score: place.score };
+  console.log(`Got details for ${placeResult.name}`);
+        } else {
+    console.error(`Error fetching details for ${place.name}: ${status}`);
+  placeDetails[index] = {...place, distance: place.distance, score: place.score};
+        }
+
+  completedRequests++;
+  if (completedRequests === places.length) {
+    console.log(`Displaying ${placeDetails.length} cafes`);
+  displayPlaces(placeDetails);
+        }
+      });
+    });
+  }
+
+  function displayPlaces(places) {
+    console.log(`Displaying ${places.length} cafes`);
+    const placesContainer = document.getElementById('placesContainer');
+    const placeTemplate = document.getElementById('placeTemplate');
+    
+    placesContainer.innerHTML = '';
+    
+    places.forEach(place => {
+      const placeElement = placeTemplate.content.cloneNode(true).firstElementChild;
+      
+      // Update the place element with actual data
+      placeElement.querySelector('h3').textContent = place.name;
+      placeElement.querySelector('p').textContent = place.vicinity;
+      placeElement.querySelector('.text-yellow-500').textContent = '★'.repeat(Math.round(place.rating));
+      placeElement.querySelector('.text-gray-600').textContent = place.rating.toFixed(1);
+      placeElement.querySelectorAll('p')[1].textContent = `Distance: ${(place.distance / 1000).toFixed(2)} km`;
+      placeElement.querySelectorAll('p')[2].textContent = `Score: ${place.score.toFixed(2)}`;
+      placeElement.querySelectorAll('p')[3].textContent = `Types: ${place.types.join(', ')}`;
+      placeElement.querySelector('a').href = `https://www.google.com/maps/place/?q=place_id:${place.place_id}`;
+      
+      // Handle photo
+      if (place.photos && place.photos.length > 0) {
+        const img = document.createElement('img');
+        img.src = place.photos[0].getUrl({ maxWidth: 400, maxHeight: 300 });
+        img.alt = place.name;
+        img.className = 'w-full h-48 object-cover';
+        placeElement.querySelector('.bg-gray-200').replaceWith(img);
+      }
+      
+      // Handle reviews
+      if (place.reviews) {
+        const reviewsHtml = displayReviews(place.reviews);
+        placeElement.insertAdjacentHTML('beforeend', reviewsHtml);
+      }
+      
+      placesContainer.appendChild(placeElement);
+    });
+  }
+
+  function displayReviews(reviews) {
+    return `
+      <div class="mt-4">
+        <h4 class="text-lg font-semibold mb-2">Reviews:</h4>
+        <div class="space-y-4">
+          ${reviews.slice(0, 2).map(review => `
+            <div class="border-t pt-2">
+              <div class="flex items-center mb-1">
+                <span class="font-medium mr-2">${review.author_name}</span>
+                <span class="text-yellow-500">${'★'.repeat(Math.round(review.rating))}</span>
+              </div>
+              <p class="text-sm text-gray-600">${review.text}</p>
+              <p class="text-xs text-gray-500 mt-1">Posted: ${new Date(review.time * 1000).toLocaleDateString()}</p>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  function showError(message) {
+    const errorMessage = document.getElementById('errorMessage');
+  errorMessage.textContent = message;
+  errorMessage.classList.remove('hidden');
+  document.getElementById('cafeList').classList.add('hidden');
+  console.error('Error:', message);
+  }
+
+  function loadGoogleMapsScript() {
+    const script = document.createElement('script');
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,geometry&callback=initCafes`;
+  script.async = true;
+  script.defer = true;
+    script.onerror = (error) => {
+    showError(`Failed to load Google Maps API. Error: ${error.message}`);
+  console.error('Script load error:', error);
+    };
+    window.gm_authFailure = () => {
+    showError('Google Maps authentication failed. Please check your API key.');
+    };
+  document.head.appendChild(script);
+  }
+
+  loadGoogleMapsScript();
+</script>

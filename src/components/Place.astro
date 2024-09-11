@@ -1,0 +1,38 @@
+---
+interface Props {
+  name: string;
+  vicinity: string;
+  rating: number;
+  distance: number;
+  score: number;
+  types: string[];
+  place_id: string;
+  photos?: { getUrl: (options: { maxWidth: number; maxHeight: number }) => string }[];
+  reviews?: {
+    author_name: string;
+    rating: number;
+    text: string;
+    time: number;
+  }[];
+}
+
+const { name, vicinity, rating, distance, score, types, place_id, photos, reviews } = Astro.props;
+---
+
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+  <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+    <span class="text-gray-500">No image available</span>
+  </div>
+  <div class="p-4">
+    <h3 class="text-xl font-semibold mb-2">{name}</h3>
+    <p class="text-gray-600 mb-2">{vicinity}</p>
+    <div class="flex items-center mb-2">
+      <span class="text-yellow-500 mr-1">{'★'.repeat(Math.round(rating))}</span>
+      <span class="text-gray-600">{rating.toFixed(1)}</span>
+    </div>
+    <p class="text-sm text-gray-500 mb-2">Distance: {(distance / 1000).toFixed(2)} km</p>
+    <p class="text-sm text-gray-500 mb-2">Score: {score.toFixed(2)}</p>
+    <p class="text-sm text-gray-500 mb-2">Types: {types.join(', ')}</p>
+    <a href={`https://www.google.com/maps/place/?q=place_id:${place_id}`} target="_blank" class="text-blue-500 hover:underline">View on Google Maps</a>
+  </div>
+</div>
