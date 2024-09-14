@@ -6,12 +6,18 @@ export default function Place({ place }) {
   const [isLoading, setIsLoading] = useState(false);
   const [city, setCity] = useState('');
   const [country, setCountry] = useState('');
+  const [wifiPassword, setWifiPassword] = useState('');
+  const [wifiSpeed, setWifiSpeed] = useState('');
+  const [socketsAvailable, setSocketsAvailable] = useState(false);
+  const [wifiUpdated, setWifiUpdated] = useState(null);
+  const [databaseId, setDatabaseId] = useState(null);
 
   useEffect(() => {
     console.log('Place component received:', place);
     if (place) {
       fetchUserScore();
       extractCityAndCountry();
+      fetchAdditionalInfo();
     }
   }, [place]);
 
@@ -90,6 +96,41 @@ export default function Place({ place }) {
     }
   };
 
+  const fetchAdditionalInfo = async () => {
+    if (!place.geometry || !place.geometry.location) return;
+
+    const latitude = place.geometry.location.lat();
+    const longitude = place.geometry.location.lng();
+
+    try {
+      const { data, error } = await supabase
+        .from('Places')
+        .select('id, wifi_password_val, wifi_speed, sockets_available, wifi_updated')
+        .eq('latitude', latitude)
+        .eq('longitude', longitude)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (data) {
+        setDatabaseId(data.id);
+        setWifiPassword(data.wifi_password_val || '');
+        setWifiSpeed(data.wifi_speed?.toString() || '');
+        setSocketsAvailable(data.sockets_available || false);
+        setWifiUpdated(data.wifi_updated || null);
+      } else {
+        // No existing data found
+        setDatabaseId(null);
+        setWifiPassword('');
+        setWifiSpeed('');
+        setSocketsAvailable(false);
+        setWifiUpdated(null);
+      }
+    } catch (error) {
+      console.error('Error fetching additional info:', error);
+    }
+  };
+
   const updateUserScore = async (increment) => {
     if (!coordinates) {
       console.error('No valid coordinates for updateUserScore');
@@ -126,6 +167,66 @@ export default function Place({ place }) {
     }
   };
 
+  const updatePlace = async () => {
+    if (!place.geometry || !place.geometry.location) {
+      console.error('No valid coordinates for updatePlace');
+      return;
+    }
+
+    setIsLoading(true);
+
+    const latitude = place.geometry.location.lat();
+    const longitude = place.geometry.location.lng();
+
+    try {
+      const placeData = {
+        name: place.name,
+        address: place.formatted_address,
+        latitude: latitude,
+        longitude: longitude,
+        city: city,
+        country: country,
+        wifi_password_val: wifiPassword,
+        wifi_speed: parseInt(wifiSpeed) || null,
+        sockets_available: socketsAvailable,
+        wifi_updated: new Date().toISOString()
+      };
+
+      let result;
+      if (databaseId) {
+        // Update existing record
+        result = await supabase
+          .from('Places')
+          .update(placeData)
+          .eq('id', databaseId);
+      } else {
+        // Insert new record
+        result = await supabase
+          .from('Places')
+          .insert(placeData)
+          .select();
+
+        if (result.data && result.data[0]) {
+          setDatabaseId(result.data[0].id);
+        }
+      }
+
+      if (result.error) throw result.error;
+      console.log('Place updated successfully');
+      fetchAdditionalInfo(); // Refresh the displayed data
+    } catch (error) {
+      console.error('Error updating place:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  };
+
   console.log('Rendering place:', place);
 
   return (
@@ -146,7 +247,6 @@ export default function Place({ place }) {
         <p className="text-gray-600 mb-2">{place.formatted_address || 'Address not available'}</p>
         <p className="text-sm text-gray-600 mb-1">City: {city}</p>
         <p className="text-sm text-gray-600 mb-2">Country: {country}</p>
-
         
         {place.formatted_phone_number && (
           <p className="text-sm text-gray-600 mb-2">Phone: {place.formatted_phone_number}</p>
@@ -207,6 +307,73 @@ export default function Place({ place }) {
                 </li>
             ))}
         </ul>
+        
+        {/* WiFi Details */}
+        {wifiPassword && (
+          <div className="mt-4 p-3 bg-blue-50 rounded-md">
+            <h4 className="text-lg font-semibold mb-2 text-blue-700">WiFi Details</h4>
+            <p className="text-sm text-gray-700 mb-1">
+              <span className="font-medium">Password:</span> {wifiPassword}
+            </p>
+            {wifiSpeed && (
+              <p className="text-sm text-gray-700 mb-1">
+                <span className="font-medium">Speed:</span> {wifiSpeed} Mbps
+              </p>
+            )}
+            <p className="text-sm text-gray-700">
+              <span className="font-medium">Sockets Available:</span> {socketsAvailable ? 'Yes' : 'No'}
+            </p>
+            {wifiUpdated && (
+              <p className="text-xs text-gray-500 mt-2">
+                Last updated: {formatDate(wifiUpdated)}
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* WiFi Input Fields */}
+        <div className="mt-4">
+          <h4 className="text-lg font-semibold mb-2">Update WiFi Information</h4>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">WiFi Password</label>
+            <input
+              type="text"
+              value={wifiPassword}
+              onChange={(e) => setWifiPassword(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </div>
+          
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">WiFi Speed (Mbps)</label>
+            <input
+              type="number"
+              value={wifiSpeed}
+              onChange={(e) => setWifiSpeed(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </div>
+          
+          <div className="mb-4">
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={socketsAvailable}
+                onChange={(e) => setSocketsAvailable(e.target.checked)}
+                className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              />
+              <span className="ml-2 text-sm text-gray-700">Sockets Available</span>
+            </label>
+          </div>
+          
+          <button
+            onClick={updatePlace}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Updating...' : 'Update Place Info'}
+          </button>
+        </div>
       </div>
     </div>
   );
