@@ -14,8 +14,10 @@
     "@astrojs/tailwind": "^5.1.0",
     "@supabase/supabase-js": "^2.45.4",
     "astro": "^4.15.4",
+    "fingerprintjs2": "^2.1.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "tailwindcss": "^3.4.11"
+    "tailwindcss": "^3.4.11",
+    "uuid": "^10.0.0"
   }
 }
