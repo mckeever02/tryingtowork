@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { v4 as uuidv4 } from 'uuid';
 import Fingerprint2 from 'fingerprintjs2';
@@ -16,21 +16,107 @@ export default function Place({ place }) {
   const [visitorId, setVisitorId] = useState(null);
   const [userVote, setUserVote] = useState(0);
 
-  useEffect(() => {
-    console.log('Place component received:', place);
-    if (place) {
-      fetchUserScore();
-      extractCityAndCountry();
-      fetchAdditionalInfo();
-      getVisitorId();
+  const getVisitorId = useCallback(async () => {
+    let storedId = localStorage.getItem('visitorId');
+    if (!storedId) {
+      const components = await Fingerprint2.getPromise();
+      const values = components.map(component => component.value);
+      const fingerprint = Fingerprint2.x64hash128(values.join(''), 31);
+      
+      const newId = `${fingerprint}-${Date.now()}`;
+      localStorage.setItem('visitorId', newId);
+      storedId = newId;
+    }
+    setVisitorId(storedId);
+    return storedId;
+  }, []);
+
+  const fetchOrCreatePlace = useCallback(async (currentVisitorId) => {
+    if (!place.geometry || !place.geometry.location) return;
+
+    const latitude = place.geometry.location.lat();
+    const longitude = place.geometry.location.lng();
+
+    try {
+      let { data, error } = await supabase
+        .from('Places')
+        .select('id, user_score')
+        .eq('latitude', latitude)
+        .eq('longitude', longitude)
+        .single();
+
+      if (error && error.code === 'PGRST116') {
+        const newPlace = {
+          name: place.name,
+          address: place.formatted_address,
+          latitude: latitude,
+          longitude: longitude,
+          user_score: 0
+        };
+
+        const { data: insertedPlace, error: insertError } = await supabase
+          .from('Places')
+          .insert(newPlace)
+          .single();
+
+        if (insertError) throw insertError;
+
+        data = insertedPlace;
+      } else if (error) {
+        throw error;
+      }
+
+      if (data && data.id) {
+        setDatabaseId(data.id);
+        setUserScore(data.user_score || 0);
+        await fetchUserVote(currentVisitorId, data.id);
+      } else {
+        console.error('No valid data returned from database');
+      }
+
+    } catch (error) {
+      console.error('Error fetching or creating place:', error);
     }
   }, [place]);
 
-  useEffect(() => {
-    if (visitorId && databaseId) {
-      fetchUserVote();
+  const fetchUserVote = useCallback(async (currentVisitorId, currentDatabaseId) => {
+    if (!currentVisitorId || !currentDatabaseId) {
+      console.error('Visitor ID or Place ID not available for fetching user vote');
+      return;
     }
-  }, [visitorId, databaseId]);
+
+    try {
+      const { data, error } = await supabase
+        .from('Votes')
+        .select('vote_type')
+        .eq('place_id', currentDatabaseId)
+        .eq('visitor_id', currentVisitorId);
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        setUserVote(data[0].vote_type);
+      } else {
+        setUserVote(0);
+      }
+    } catch (error) {
+      console.error('Error fetching user vote:', error);
+      setUserVote(0);
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log('Place component received:', place);
+    if (place) {
+      getVisitorId().then(currentVisitorId => {
+        if (currentVisitorId) {
+          fetchOrCreatePlace(currentVisitorId);
+        } else {
+          console.error('Failed to get visitor ID');
+        }
+      });
+    }
+  }, [place, getVisitorId, fetchOrCreatePlace]);
 
   const extractCityAndCountry = () => {
     console.log('Extracting city and country from:', place);
@@ -142,38 +228,6 @@ export default function Place({ place }) {
     }
   };
 
-  const getVisitorId = async () => {
-    let storedId = localStorage.getItem('visitorId');
-    if (!storedId) {
-      const components = await Fingerprint2.getPromise();
-      const values = components.map(component => component.value);
-      const fingerprint = Fingerprint2.x64hash128(values.join(''), 31);
-      
-      // Combine fingerprint with timestamp for added uniqueness
-      const newId = `${fingerprint}-${Date.now()}`;
-      localStorage.setItem('visitorId', newId);
-      storedId = newId;
-    }
-    setVisitorId(storedId);
-  };
-
-  const fetchUserVote = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('Votes')
-        .select('vote_type')
-        .eq('place_id', databaseId)
-        .eq('visitor_id', visitorId)
-        .single();
-
-      if (error && error.code !== 'PGRST116') throw error;
-
-      setUserVote(data?.vote_type || 0);
-    } catch (error) {
-      console.error('Error fetching user vote:', error);
-    }
-  };
-
   const updateUserScore = async (increment) => {
     if (!visitorId || !databaseId) {
       console.error('Visitor ID or Place ID not available');
@@ -182,7 +236,8 @@ export default function Place({ place }) {
 
     setIsLoading(true);
     try {
-      console.log('Calling vote_and_update_score with:', { databaseId, visitorId, increment });
+      console.log('Updating score for place:', databaseId, 'visitor:', visitorId, 'vote:', increment);
+
       const { data, error } = await supabase.rpc('vote_and_update_score', {
         p_place_id: databaseId,
         p_visitor_id: visitorId,
@@ -197,6 +252,8 @@ export default function Place({ place }) {
       console.log('vote_and_update_score response:', data);
 
       if (data && data.length > 0) {
+        console.log('New score:', data[0].new_score);
+        console.log('New user vote:', data[0].user_vote);
         setUserScore(data[0].new_score);
         setUserVote(data[0].user_vote);
         console.log('Vote recorded successfully. New score:', data[0].new_score);
@@ -324,17 +381,17 @@ export default function Place({ place }) {
             <p className="text-sm text-gray-500 mr-2">User Score: {userScore?.toFixed(1) || 'N/A'}</p>
             <button
               onClick={() => updateUserScore(1)}
-              className={`bg-green-500 text-white px-2 py-1 rounded mr-2 ${userVote === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={isLoading || userVote === 1}
+              className={`bg-green-500 text-white px-2 py-1 rounded mr-2 ${userVote === 1 ? 'opacity-50' : ''}`}
+              disabled={isLoading}
             >
-              Upvote
+              {userVote === 1 ? 'Upvoted' : 'Upvote'}
             </button>
             <button
               onClick={() => updateUserScore(-1)}
-              className={`bg-red-500 text-white px-2 py-1 rounded ${userVote === -1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={isLoading || userVote === -1}
+              className={`bg-red-500 text-white px-2 py-1 rounded ${userVote === -1 ? 'opacity-50' : ''}`}
+              disabled={isLoading}
             >
-              Downvote
+              {userVote === -1 ? 'Downvoted' : 'Downvote'}
             </button>
           </div>
         )}
