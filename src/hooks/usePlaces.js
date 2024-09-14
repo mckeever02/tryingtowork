@@ -55,13 +55,17 @@ export function usePlaces(location) {
             type: ['cafe']
         };
 
-        service.nearbySearch(request, (results, status) => {
+        service.nearbySearch(request, async (results, status) => {
             console.log('Place search completed. Status:', status, 'Results:', results);
             if (status === google.maps.places.PlacesServiceStatus.OK) {
                 if (results.length === 0) {
                     setError('No places found nearby');
                 } else {
-                    const scoredPlaces = results
+                    const detailedPlaces = await Promise.all(
+                        results.map(place => getPlaceDetails(service, place.place_id))
+                    );
+
+                    const scoredPlaces = detailedPlaces
                         .map(place => calculateScore(place, location))
                         .sort((a, b) => b.score - a.score); // Sort by score in descending order
 
@@ -77,4 +81,30 @@ export function usePlaces(location) {
     }, [googleMapsLoaded, location]);
 
     return { places, loading, error };
+}
+
+function getPlaceDetails(service, placeId) {
+    return new Promise((resolve, reject) => {
+        service.getDetails(
+            { 
+                placeId: placeId, 
+                fields: [
+                    'name', 
+                    'rating', 
+                    'user_ratings_total', 
+                    'reviews', 
+                    'geometry', 
+                    'formatted_address', 
+                    'photos'
+                ] 
+            },
+            (place, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    resolve(place);
+                } else {
+                    reject(status);
+                }
+            }
+        );
+    });
 }

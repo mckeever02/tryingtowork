@@ -8,8 +8,8 @@ export default defineConfig({
   vite: {
     define: {
       'import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY': JSON.stringify(process.env.PUBLIC_GOOGLE_MAPS_API_KEY),
-      'import.meta.env.SUPABASE_URL': JSON.stringify(process.env.SUPABASE_URL),
-      'import.meta.env.SUPABASE_ANON_KEY': JSON.stringify(process.env.SUPABASE_ANON_KEY)
+      'import.meta.env.PUBLIC_SSUPABASE_URL': JSON.stringify(process.env.SUPABASE_URL),
+      'import.meta.env.PUBLIC_SSUPABASE_ANON_KEY': JSON.stringify(process.env.SUPABASE_ANON_KEY)
     },
     plugins: []  // Ensure this is empty or remove it if you haven't added any Vite plugins
   }
