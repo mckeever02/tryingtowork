@@ -4,13 +4,40 @@ import { supabase } from '../lib/supabase';
 export default function Place({ place }) {
   const [userScore, setUserScore] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [city, setCity] = useState('');
+  const [country, setCountry] = useState('');
 
   useEffect(() => {
     console.log('Place component received:', place);
     if (place) {
       fetchUserScore();
+      extractCityAndCountry();
     }
   }, [place]);
+
+  const extractCityAndCountry = () => {
+    console.log('Extracting city and country from:', place);
+    if (place.address_components) {
+      const cityComponent = place.address_components.find(
+        component => component.types.includes('locality') || component.types.includes('administrative_area_level_1')
+      );
+      const countryComponent = place.address_components.find(
+        component => component.types.includes('country')
+      );
+
+      setCity(cityComponent ? cityComponent.long_name : 'City not available');
+      setCountry(countryComponent ? countryComponent.long_name : 'Country not available');
+    } else if (place.formatted_address) {
+      // Fallback: try to extract from formatted_address
+      const addressParts = place.formatted_address.split(',');
+      setCity(addressParts[addressParts.length - 2]?.trim() || 'City not available');
+      setCountry(addressParts[addressParts.length - 1]?.trim() || 'Country not available');
+    } else {
+      console.log('No address components or formatted address found');
+      setCity('City not available');
+      setCountry('Country not available');
+    }
+  };
 
   const getCoordinates = () => {
     if (place.geometry && place.geometry.location) {
@@ -80,7 +107,9 @@ export default function Place({ place }) {
           longitude: coordinates.longitude,
           user_score: newScore,
           name: place.name,
-          vicinity: place.vicinity
+          address: place.formatted_address,
+          city: city,
+          country: country
         }, { onConflict: ['latitude', 'longitude'] })
         .select('user_score')
         .single();
@@ -95,28 +124,6 @@ export default function Place({ place }) {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const getShortAddress = (place) => {
-    if (place.vicinity) return place.vicinity;
-
-    if (place.address_components) {
-      const streetNumber = place.address_components.find(c => c.types.includes('street_number'))?.long_name;
-      const route = place.address_components.find(c => c.types.includes('route'))?.long_name;
-      const locality = place.address_components.find(c => c.types.includes('locality'))?.long_name;
-      
-      if (streetNumber && route) return `${streetNumber} ${route}, ${locality || ''}`.trim();
-      if (route) return `${route}, ${locality || ''}`.trim();
-      if (locality) return locality;
-    }
-
-    if (place.formatted_address) {
-      // Split the address and take the first two parts
-      const parts = place.formatted_address.split(',');
-      return parts.slice(0, 2).join(',').trim();
-    }
-
-    return 'Address not available';
   };
 
   console.log('Rendering place:', place);
@@ -138,11 +145,11 @@ export default function Place({ place }) {
         <h3 className="text-xl font-semibold mb-2">{place.name}</h3>
         <p className="text-sm text-gray-600 mb-2">ID: {place.id || 'N/A'}</p>
         <p className="text-sm text-gray-600 mb-2">Place ID: {place.place_id || 'N/A'}</p>
-        <p className="text-gray-600 mb-2">{getShortAddress(place)}</p>
+        <p className="text-gray-600 mb-2">{place.formatted_address || 'Address not available'}</p>
+        <p className="text-sm text-gray-600 mb-1">City: {city}</p>
+        <p className="text-sm text-gray-600 mb-2">Country: {country}</p>
+
         
-        {place.formatted_address && (
-          <p className="text-sm text-gray-600 mb-2">Full Address: {place.formatted_address}</p>
-        )}
         {place.formatted_phone_number && (
           <p className="text-sm text-gray-600 mb-2">Phone: {place.formatted_phone_number}</p>
         )}
@@ -177,14 +184,14 @@ export default function Place({ place }) {
             <button
               onClick={() => updateUserScore(1)}
               className="bg-green-500 text-white px-2 py-1 rounded mr-2"
-              disabled={isLoading || !coordinates}
+              disabled={isLoading}
             >
               Upvote
             </button>
             <button
               onClick={() => updateUserScore(-1)}
               className="bg-red-500 text-white px-2 py-1 rounded"
-              disabled={isLoading || !coordinates}
+              disabled={isLoading}
             >
               Downvote
             </button>
