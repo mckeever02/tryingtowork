@@ -1,14 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Places from '../components/Places.astro';
-import SearchFilter from '../components/SearchFilter.jsx';
 import ErrorMessage from '../components/ErrorMessage.astro';
 ---
 
 <Layout title="Trying to Work">
   <main class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-6">Trying to Work</h1>
-    <SearchFilter client:load />
     <Places />
     <ErrorMessage />
   </main>

@@ -143,8 +143,6 @@ export default function Place({ place }) {
       )}
       <div className="p-4">
         <h3 className="text-xl font-semibold mb-2">{place.name}</h3>
-        <p className="text-sm text-gray-600 mb-2">ID: {place.id || 'N/A'}</p>
-        <p className="text-sm text-gray-600 mb-2">Place ID: {place.place_id || 'N/A'}</p>
         <p className="text-gray-600 mb-2">{place.formatted_address || 'Address not available'}</p>
         <p className="text-sm text-gray-600 mb-1">City: {city}</p>
         <p className="text-sm text-gray-600 mb-2">Country: {country}</p>
