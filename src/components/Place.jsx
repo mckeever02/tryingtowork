@@ -173,7 +173,7 @@ export default function Place({ place }) {
         const newPlace = {
           place_id: placeId,
           name: place.displayName?.text,
-          address: place.formattedAddress,
+          address: place.shortFormattedAddress,
           latitude: place.location?.latitude,
           longitude: place.location?.longitude,
           user_score: 0
@@ -289,7 +289,7 @@ export default function Place({ place }) {
     try {
       const placeData = {
         name: place.displayName.text,
-        address: place.formattedAddress,
+        address: place.shortFormattedAddress,
         latitude: coordinates.latitude,
         longitude: coordinates.longitude,
         city: city,
@@ -356,7 +356,7 @@ export default function Place({ place }) {
       )}
       <div className="p-4">
         <h3 className="text-xl font-semibold mb-2">{place.displayName?.text}</h3>
-        <p className="text-gray-600 mb-1">{place.shortFormattedAddress || place.formattedAddress}</p>
+        <p className="text-gray-600 mb-1">{place.shortFormattedAddress}</p>
         {(city || country) && (
           <p className="text-sm text-gray-500 mb-2">
             {city && country ? `${city}, ${country}` : city || country}
