@@ -17,10 +17,12 @@ export default function Place({ place }) {
   const [databaseId, setDatabaseId] = useState(null);
   const [visitorId, setVisitorId] = useState(null);
   const [userVote, setUserVote] = useState(0);
+  const [placeId, setPlaceId] = useState(null);
 
   useEffect(() => {
     console.log('Place component received:', place);
     if (place) {
+      setPlaceId(place.id); // Make sure this matches the ID field from the Google Places API
       fetchUserScore();
       extractCityAndCountry();
       fetchAdditionalInfo();
@@ -153,54 +155,53 @@ export default function Place({ place }) {
   };
 
   const fetchOrCreatePlace = async () => {
-    if (!coordinates) return;
-
-    const { latitude, longitude } = coordinates;
+    if (!placeId) {
+      console.error('Place ID not available');
+      return null;
+    }
 
     try {
-      // Try to fetch the place
       let { data, error } = await supabase
         .from('Places')
         .select('id, user_score')
-        .eq('latitude', latitude)
-        .eq('longitude', longitude)
-        .single();
+        .eq('place_id', placeId)
+        .maybeSingle();
 
-      if (error && error.code === 'PGRST116') {
-        // Place doesn't exist, so create it
+      if (error) throw error;
+
+      if (!data) {
         const newPlace = {
-          name: place.displayName.text,
+          place_id: placeId,
+          name: place.displayName?.text,
           address: place.formattedAddress,
-          latitude: latitude,
-          longitude: longitude,
+          latitude: place.location?.latitude,
+          longitude: place.location?.longitude,
           user_score: 0
         };
 
         const { data: insertedPlace, error: insertError } = await supabase
           .from('Places')
           .insert(newPlace)
+          .select()
           .single();
 
         if (insertError) throw insertError;
 
         data = insertedPlace;
-      } else if (error) {
-        throw error;
       }
 
       setDatabaseId(data.id);
       setUserScore(data.user_score || 0);
 
-      // Fetch user's vote
-      await fetchUserVote(data.id);
-
+      return data.id;
     } catch (error) {
       console.error('Error fetching or creating place:', error);
+      return null;
     }
   };
 
-  const fetchUserVote = async () => {
-    if (!visitorId || !databaseId) {
+  const fetchUserVote = async (fetchedDatabaseId) => {
+    if (!visitorId || !fetchedDatabaseId) {
       console.log('Visitor ID or Database ID not available yet');
       return;
     }
@@ -209,13 +210,12 @@ export default function Place({ place }) {
       const { data, error } = await supabase
         .from('Votes')
         .select('vote_type')
-        .eq('place_id', databaseId)
+        .eq('place_id', fetchedDatabaseId)
         .eq('visitor_id', visitorId)
         .single();
 
       if (error) {
         if (error.code === 'PGRST116') {
-          // No matching vote found, which is okay
           console.log('No existing vote found for this place and visitor');
           setUserVote(0);
         } else {
@@ -226,25 +226,30 @@ export default function Place({ place }) {
       }
     } catch (error) {
       console.error('Error fetching user vote:', error);
-      // Set a default value in case of error
       setUserVote(0);
     }
   };
 
   const updateUserScore = async (increment) => {
-    if (!visitorId || !databaseId) {
-      console.error('Visitor ID or Place ID not available');
+    if (!visitorId) {
+      console.error('Visitor ID not available');
       return;
     }
 
     setIsLoading(true);
     try {
+      const fetchedDatabaseId = await fetchOrCreatePlace();
+
+      if (!fetchedDatabaseId) {
+        throw new Error('Failed to create or fetch place record');
+      }
+
       console.log('Current score:', userScore);
       console.log('Current user vote:', userVote);
       console.log('Attempting to vote:', increment);
 
       const { data, error } = await supabase.rpc('vote_and_update_score', {
-        p_place_id: databaseId,
+        p_place_id: fetchedDatabaseId,
         p_visitor_id: visitorId,
         p_vote_type: increment
       });
