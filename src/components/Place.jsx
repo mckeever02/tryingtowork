@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { v4 as uuidv4 } from 'uuid';
 import Fingerprint2 from 'fingerprintjs2';
@@ -16,107 +16,22 @@ export default function Place({ place }) {
   const [visitorId, setVisitorId] = useState(null);
   const [userVote, setUserVote] = useState(0);
 
-  const getVisitorId = useCallback(async () => {
-    let storedId = localStorage.getItem('visitorId');
-    if (!storedId) {
-      const components = await Fingerprint2.getPromise();
-      const values = components.map(component => component.value);
-      const fingerprint = Fingerprint2.x64hash128(values.join(''), 31);
-      
-      const newId = `${fingerprint}-${Date.now()}`;
-      localStorage.setItem('visitorId', newId);
-      storedId = newId;
-    }
-    setVisitorId(storedId);
-    return storedId;
-  }, []);
-
-  const fetchOrCreatePlace = useCallback(async (currentVisitorId) => {
-    if (!place.geometry || !place.geometry.location) return;
-
-    const latitude = place.geometry.location.lat();
-    const longitude = place.geometry.location.lng();
-
-    try {
-      let { data, error } = await supabase
-        .from('Places')
-        .select('id, user_score')
-        .eq('latitude', latitude)
-        .eq('longitude', longitude)
-        .single();
-
-      if (error && error.code === 'PGRST116') {
-        const newPlace = {
-          name: place.name,
-          address: place.formatted_address,
-          latitude: latitude,
-          longitude: longitude,
-          user_score: 0
-        };
-
-        const { data: insertedPlace, error: insertError } = await supabase
-          .from('Places')
-          .insert(newPlace)
-          .single();
-
-        if (insertError) throw insertError;
-
-        data = insertedPlace;
-      } else if (error) {
-        throw error;
-      }
-
-      if (data && data.id) {
-        setDatabaseId(data.id);
-        setUserScore(data.user_score || 0);
-        await fetchUserVote(currentVisitorId, data.id);
-      } else {
-        console.error('No valid data returned from database');
-      }
-
-    } catch (error) {
-      console.error('Error fetching or creating place:', error);
-    }
-  }, [place]);
-
-  const fetchUserVote = useCallback(async (currentVisitorId, currentDatabaseId) => {
-    if (!currentVisitorId || !currentDatabaseId) {
-      console.error('Visitor ID or Place ID not available for fetching user vote');
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase
-        .from('Votes')
-        .select('vote_type')
-        .eq('place_id', currentDatabaseId)
-        .eq('visitor_id', currentVisitorId);
-
-      if (error) throw error;
-
-      if (data && data.length > 0) {
-        setUserVote(data[0].vote_type);
-      } else {
-        setUserVote(0);
-      }
-    } catch (error) {
-      console.error('Error fetching user vote:', error);
-      setUserVote(0);
-    }
-  }, []);
-
   useEffect(() => {
     console.log('Place component received:', place);
     if (place) {
-      getVisitorId().then(currentVisitorId => {
-        if (currentVisitorId) {
-          fetchOrCreatePlace(currentVisitorId);
-        } else {
-          console.error('Failed to get visitor ID');
-        }
-      });
+      fetchUserScore();
+      extractCityAndCountry();
+      fetchAdditionalInfo();
+      getVisitorId();
     }
-  }, [place, getVisitorId, fetchOrCreatePlace]);
+  }, [place]);
+
+  useEffect(() => {
+    console.log('visitorId:', visitorId, 'databaseId:', databaseId);
+    if (visitorId && databaseId) {
+      fetchUserVote();
+    }
+  }, [visitorId, databaseId]);
 
   const extractCityAndCountry = () => {
     console.log('Extracting city and country from:', place);
@@ -211,6 +126,7 @@ export default function Place({ place }) {
 
       if (data) {
         setDatabaseId(data.id);
+        console.log('Set databaseId:', data.id);
         setWifiPassword(data.wifi_password_val || '');
         setWifiSpeed(data.wifi_speed?.toString() || '');
         setSocketsAvailable(data.sockets_available || false);
@@ -228,6 +144,101 @@ export default function Place({ place }) {
     }
   };
 
+  const getVisitorId = async () => {
+    let storedId = localStorage.getItem('visitorId');
+    if (!storedId) {
+      const components = await Fingerprint2.getPromise();
+      const values = components.map(component => component.value);
+      const fingerprint = Fingerprint2.x64hash128(values.join(''), 31);
+      
+      // Combine fingerprint with timestamp for added uniqueness
+      const newId = `${fingerprint}-${Date.now()}`;
+      localStorage.setItem('visitorId', newId);
+      storedId = newId;
+    }
+    setVisitorId(storedId);
+  };
+
+  const fetchOrCreatePlace = async () => {
+    if (!place.geometry || !place.geometry.location) return;
+
+    const latitude = place.geometry.location.lat();
+    const longitude = place.geometry.location.lng();
+
+    try {
+      // Try to fetch the place
+      let { data, error } = await supabase
+        .from('Places')
+        .select('id, user_score')
+        .eq('latitude', latitude)
+        .eq('longitude', longitude)
+        .single();
+
+      if (error && error.code === 'PGRST116') {
+        // Place doesn't exist, so create it
+        const newPlace = {
+          name: place.name,
+          address: place.formatted_address,
+          latitude: latitude,
+          longitude: longitude,
+          user_score: 0
+        };
+
+        const { data: insertedPlace, error: insertError } = await supabase
+          .from('Places')
+          .insert(newPlace)
+          .single();
+
+        if (insertError) throw insertError;
+
+        data = insertedPlace;
+      } else if (error) {
+        throw error;
+      }
+
+      setDatabaseId(data.id);
+      setUserScore(data.user_score || 0);
+
+      // Fetch user's vote
+      await fetchUserVote(data.id);
+
+    } catch (error) {
+      console.error('Error fetching or creating place:', error);
+    }
+  };
+
+  const fetchUserVote = async () => {
+    if (!visitorId || !databaseId) {
+      console.log('Visitor ID or Database ID not available yet');
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('Votes')
+        .select('vote_type')
+        .eq('place_id', databaseId)
+        .eq('visitor_id', visitorId)
+        .single();
+
+      if (error) {
+        if (error.code === 'PGRST116') {
+          // No matching vote found, which is okay
+          console.log('No existing vote found for this place and visitor');
+          setUserVote(0);
+        } else {
+          throw error;
+        }
+      } else {
+        setUserVote(data?.vote_type || 0);
+      }
+    } catch (error) {
+      console.error('Error fetching user vote:', error);
+      // Set a default value in case of error
+      setUserVote(0);
+    }
+  };
+
   const updateUserScore = async (increment) => {
     if (!visitorId || !databaseId) {
       console.error('Visitor ID or Place ID not available');
@@ -236,7 +247,9 @@ export default function Place({ place }) {
 
     setIsLoading(true);
     try {
-      console.log('Updating score for place:', databaseId, 'visitor:', visitorId, 'vote:', increment);
+      console.log('Current score:', userScore);
+      console.log('Current user vote:', userVote);
+      console.log('Attempting to vote:', increment);
 
       const { data, error } = await supabase.rpc('vote_and_update_score', {
         p_place_id: databaseId,
@@ -254,6 +267,7 @@ export default function Place({ place }) {
       if (data && data.length > 0) {
         console.log('New score:', data[0].new_score);
         console.log('New user vote:', data[0].user_vote);
+        console.log('Score change:', data[0].new_score - userScore);
         setUserScore(data[0].new_score);
         setUserVote(data[0].user_vote);
         console.log('Vote recorded successfully. New score:', data[0].new_score);
@@ -381,17 +395,17 @@ export default function Place({ place }) {
             <p className="text-sm text-gray-500 mr-2">User Score: {userScore?.toFixed(1) || 'N/A'}</p>
             <button
               onClick={() => updateUserScore(1)}
-              className={`bg-green-500 text-white px-2 py-1 rounded mr-2 ${userVote === 1 ? 'opacity-50' : ''}`}
-              disabled={isLoading}
+              className={`bg-green-500 text-white px-2 py-1 rounded mr-2 ${userVote === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={isLoading || userVote === 1}
             >
-              {userVote === 1 ? 'Upvoted' : 'Upvote'}
+              Upvote
             </button>
             <button
               onClick={() => updateUserScore(-1)}
-              className={`bg-red-500 text-white px-2 py-1 rounded ${userVote === -1 ? 'opacity-50' : ''}`}
-              disabled={isLoading}
+              className={`bg-red-500 text-white px-2 py-1 rounded ${userVote === -1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={isLoading || userVote === -1}
             >
-              {userVote === -1 ? 'Downvoted' : 'Downvote'}
+              Downvote
             </button>
           </div>
         )}
