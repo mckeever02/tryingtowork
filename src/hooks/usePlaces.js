@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useGoogleMaps } from './useGoogleMaps';
 import { calculateDistance } from '../utils/geoUtils';
+import { getFromCache, setInCache } from '../utils/cache';
 
 const API_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -48,6 +49,18 @@ export function usePlaces(location) {
         if (!location || !googleMapsLoaded) return;
 
         const fetchPlaces = async () => {
+            const cacheKey = `places_${location.lat.toFixed(6)}_${location.lng.toFixed(6)}`;
+            const cachedData = getFromCache(cacheKey);
+
+            if (cachedData) {
+                console.log('Cache hit: Using cached place data for', cacheKey);
+                setPlaces(cachedData);
+                setLoading(false);
+                return;
+            }
+
+            console.log('Cache miss: Fetching new place data for', cacheKey);
+            alert('Making API call to Google Places API'); // Add this line
             try {
                 const response = await fetch(`https://places.googleapis.com/v1/places:searchNearby`, {
                     method: 'POST',
@@ -89,7 +102,10 @@ export function usePlaces(location) {
                     )
                 })).sort((a, b) => b.score - a.score);
 
+                console.log('Fetched and processed places:', scoredPlaces);
                 setPlaces(scoredPlaces);
+                setInCache(cacheKey, scoredPlaces);
+                console.log('Cached data for key:', cacheKey);
             } catch (err) {
                 console.error('Error fetching places:', err);
                 setError(err.message);

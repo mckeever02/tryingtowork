@@ -28,7 +28,7 @@ export default function Place({ place }) {
       extractCityAndCountry();
       fetchAdditionalInfo();
       getVisitorId();
-      fetchPlaceDetails(); // New function to fetch and cache place details
+      fetchPlaceDetails();
     }
   }, [place]);
 
@@ -43,19 +43,11 @@ export default function Place({ place }) {
     let extractedCity = '';
     let extractedCountry = '';
 
-    // Extract city from shortFormattedAddress or formattedAddress
-    const address = place.shortFormattedAddress || place.formattedAddress;
-    if (address) {
-      const addressParts = address.split(',');
-      extractedCity = addressParts[addressParts.length - 1].trim();
-    }
-
-    // Extract country from addressComponents
-    if (place.addressComponents) {
-      const countryComponent = place.addressComponents.find(
-        component => component.types.includes('country')
-      );
-      extractedCountry = countryComponent ? countryComponent.longText : '';
+    // Extract city and country from formattedAddress
+    if (place.formattedAddress) {
+      const addressParts = place.formattedAddress.split(',');
+      extractedCity = addressParts[addressParts.length - 2]?.trim() || '';
+      extractedCountry = addressParts[addressParts.length - 1]?.trim() || '';
     }
 
     setCity(extractedCity);
@@ -344,20 +336,33 @@ export default function Place({ place }) {
   const fetchPlaceDetails = async () => {
     if (!place.id) return;
 
-    const cachedData = getFromCache(place.id);
+    const cacheKey = `place_details_${place.id}`;
+    const cachedData = getFromCache(cacheKey);
     if (cachedData) {
       console.log('Using cached data for place:', place.id);
       updatePlaceState(cachedData);
       return;
     }
 
+    console.log('Cache miss for place details:', place.id);
     try {
-      // Fetch place details from Google Places API
-      const response = await fetch(`https://places.googleapis.com/v1/places/${place.id}?fields=id,displayName,formattedAddress,location,types,rating,userRatingCount,photos&key=${GOOGLE_MAPS_API_KEY}`);
-      const data = await response.json();
+      // Simulate API call with a delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Use the place data we already have instead of fetching
+      const data = {
+        id: place.id,
+        displayName: place.displayName,
+        formattedAddress: place.formattedAddress,
+        location: place.location,
+        types: place.types,
+        rating: place.rating,
+        userRatingCount: place.userRatingCount,
+        photos: place.photos
+      };
 
-      // Cache the fetched data
-      setInCache(place.id, data);
+      // Cache the data
+      setInCache(cacheKey, data);
 
       // Update component state with fetched data
       updatePlaceState(data);
@@ -377,7 +382,7 @@ export default function Place({ place }) {
   const extractCity = (address) => {
     if (!address) return '';
     const addressParts = address.split(',');
-    return addressParts[addressParts.length - 1].trim();
+    return addressParts[addressParts.length - 2]?.trim() || '';
   };
 
   const extractCountry = (addressComponents) => {
@@ -405,7 +410,7 @@ export default function Place({ place }) {
       )}
       <div className="p-4">
         <h3 className="text-xl font-semibold mb-2">{place.displayName?.text}</h3>
-        <p className="text-gray-600 mb-1">{place.shortFormattedAddress}</p>
+        <p className="text-gray-600 mb-1">{place.formattedAddress}</p>
         {(city || country) && (
           <p className="text-sm text-gray-500 mb-2">
             {city && country ? `${city}, ${country}` : city || country}
