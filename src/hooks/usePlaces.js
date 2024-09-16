@@ -1,6 +1,9 @@
 // src/hooks/usePlaces.js
 import { useState, useEffect } from 'react';
 import { useGoogleMaps } from './useGoogleMaps';
+import { calculateDistance } from '../utils/geoUtils';
+
+const API_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY;
 
 // Scoring algorithm constants
 const MAX_DISTANCE = 5000; // 5km
@@ -9,9 +12,11 @@ const RATING_WEIGHT = 0.3;
 const RATING_COUNT_WEIGHT = 0.2;
 
 function calculateScore(place, userLocation) {
-    const distance = google.maps.geometry.spherical.computeDistanceBetween(
-        new google.maps.LatLng(userLocation.lat, userLocation.lng),
-        place.geometry.location
+    const distance = calculateDistance(
+        userLocation.lat,
+        userLocation.lng,
+        place.location.latitude,
+        place.location.longitude
     );
 
     // Normalize distance (closer is better)
@@ -21,7 +26,7 @@ function calculateScore(place, userLocation) {
     const ratingScore = place.rating ? place.rating / 5 : 0;
 
     // Normalize rating count (more ratings is better, max out at 1000 ratings)
-    const ratingCountScore = Math.min((place.user_ratings_total || 0) / 1000, 1);
+    const ratingCountScore = Math.min((place.userRatingCount || 0) / 1000, 1);
 
     // Calculate weighted score
     const score = (
@@ -30,11 +35,7 @@ function calculateScore(place, userLocation) {
         ratingCountScore * RATING_COUNT_WEIGHT
     );
 
-    return {
-        ...place,
-        distance,
-        score
-    };
+    return score;
 }
 
 export function usePlaces(location) {
@@ -44,41 +45,61 @@ export function usePlaces(location) {
     const googleMapsLoaded = useGoogleMaps();
 
     useEffect(() => {
-        console.log('usePlaces effect running. Google Maps loaded:', googleMapsLoaded, 'Location:', location);
-        if (!googleMapsLoaded || !location) return;
+        if (!location || !googleMapsLoaded) return;
 
-        console.log('Initiating place search');
-        const service = new google.maps.places.PlacesService(document.createElement('div'));
-        const request = {
-            location: new google.maps.LatLng(location.lat, location.lng),
-            radius: MAX_DISTANCE,
-            type: ['cafe']
+        const fetchPlaces = async () => {
+            try {
+                const response = await fetch(`https://places.googleapis.com/v1/places:searchNearby`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Goog-Api-Key': API_KEY,
+                        'X-Goog-FieldMask': '*'  // Request all available fields
+                    },
+                    body: JSON.stringify({
+                        locationRestriction: {
+                            circle: {
+                                center: {
+                                    latitude: location.lat,
+                                    longitude: location.lng
+                                },
+                                radius: 5000.0
+                            }
+                        },
+                        includedTypes: ["cafe"]
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch places');
+                }
+
+                const data = await response.json();
+                
+                console.log('Full API response:', data);
+
+                const scoredPlaces = data.places.map(place => ({
+                    ...place,
+                    score: calculateScore(place, location),
+                    distance: calculateDistance(
+                        location.lat,
+                        location.lng,
+                        place.location.latitude,
+                        place.location.longitude
+                    )
+                })).sort((a, b) => b.score - a.score);
+
+                setPlaces(scoredPlaces);
+            } catch (err) {
+                console.error('Error fetching places:', err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
         };
 
-        service.nearbySearch(request, async (results, status) => {
-            console.log('Place search completed. Status:', status, 'Results:', results);
-            if (status === google.maps.places.PlacesServiceStatus.OK) {
-                if (results.length === 0) {
-                    setError('No places found nearby');
-                } else {
-                    const detailedPlaces = await Promise.all(
-                        results.map(place => getPlaceDetails(service, place.place_id))
-                    );
-
-                    const scoredPlaces = detailedPlaces
-                        .map(place => calculateScore(place, location))
-                        .sort((a, b) => b.score - a.score); // Sort by score in descending order
-
-                    console.log('Processed and scored places:', scoredPlaces);
-                    setPlaces(scoredPlaces);
-                    console.log('Places state updated:', scoredPlaces.length);
-                }
-            } else {
-                setError(`Failed to fetch places: ${status}`);
-            }
-            setLoading(false);
-        });
-    }, [googleMapsLoaded, location]);
+        fetchPlaces();
+    }, [location, googleMapsLoaded]);
 
     return { places, loading, error };
 }
