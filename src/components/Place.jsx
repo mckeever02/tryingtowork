@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { v4 as uuidv4 } from 'uuid';
 import Fingerprint2 from 'fingerprintjs2';
+import { getFromCache, setInCache } from '../utils/cache';
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -22,11 +23,12 @@ export default function Place({ place }) {
   useEffect(() => {
     console.log('Place component received:', place);
     if (place) {
-      setPlaceId(place.id); // Make sure this matches the ID field from the Google Places API
+      setPlaceId(place.id);
       fetchUserScore();
       extractCityAndCountry();
       fetchAdditionalInfo();
       getVisitorId();
+      fetchPlaceDetails(); // New function to fetch and cache place details
     }
   }, [place]);
 
@@ -337,6 +339,53 @@ export default function Place({ place }) {
 
   const getPhotoUrl = (photoName) => {
     return `https://places.googleapis.com/v1/${photoName}/media?key=${GOOGLE_MAPS_API_KEY}&maxHeightPx=800&maxWidthPx=1200`;
+  };
+
+  const fetchPlaceDetails = async () => {
+    if (!place.id) return;
+
+    const cachedData = getFromCache(place.id);
+    if (cachedData) {
+      console.log('Using cached data for place:', place.id);
+      updatePlaceState(cachedData);
+      return;
+    }
+
+    try {
+      // Fetch place details from Google Places API
+      const response = await fetch(`https://places.googleapis.com/v1/places/${place.id}?fields=id,displayName,formattedAddress,location,types,rating,userRatingCount,photos&key=${GOOGLE_MAPS_API_KEY}`);
+      const data = await response.json();
+
+      // Cache the fetched data
+      setInCache(place.id, data);
+
+      // Update component state with fetched data
+      updatePlaceState(data);
+    } catch (error) {
+      console.error('Error fetching place details:', error);
+    }
+  };
+
+  const updatePlaceState = (data) => {
+    // Update component state with place details
+    // This function will update all relevant state variables with the fetched or cached data
+    setCity(extractCity(data.formattedAddress));
+    setCountry(extractCountry(data.addressComponents));
+    // ... update other state variables as needed
+  };
+
+  const extractCity = (address) => {
+    if (!address) return '';
+    const addressParts = address.split(',');
+    return addressParts[addressParts.length - 1].trim();
+  };
+
+  const extractCountry = (addressComponents) => {
+    if (!addressComponents) return '';
+    const countryComponent = addressComponents.find(
+      component => component.types.includes('country')
+    );
+    return countryComponent ? countryComponent.longText : '';
   };
 
   console.log('Rendering place:', place);
