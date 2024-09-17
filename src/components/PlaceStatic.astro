@@ -1,0 +1,242 @@
+---
+const { place } = Astro.props
+
+const formatDate = (dateString) => {
+  if (!dateString) return ""
+  const date = new Date(dateString)
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
+}
+
+const tabs = [
+  { id: "about", label: "About", isActive: false },
+  { id: "wifi", label: "Wi-Fi", isActive: true },
+  { id: "reviews", label: "Reviews", isActive: false },
+  { id: "hours", label: "Opening Hours", isActive: false },
+]
+---
+
+<article class="bg-white rounded-lg shadow-sm overflow-hidden">
+  <div class="img-container relative">
+    <!-- Voting buttons -->
+    <!-- Note: You'll need to implement client-side interactivity for these buttons -->
+    <div class="votes-container absolute top-0 left-0 p-3">
+      <div
+        class="votes rounded-full flex flex-col justify-center items-center p-1 bg-white shadow-sm"
+      >
+        <button
+          class="rounded-full w-8 h-8 bg-gray-50 text-gray-700 hover:bg-gray-100 active:bg-black active:text-white"
+        >
+          ↑
+        </button>
+        <!-- User Score -->
+        <span class="text-center text-sm font-semibold text-black inline-block">
+          {place.additionalInfo.userScore || 0}
+        </span>
+        <button
+          class="rounded-full w-8 h-8 bg-gray-50 text-gray-700 hover:bg-gray-100 active:bg-black active:text-white"
+        >
+          ↓
+        </button>
+      </div>
+    </div>
+    {
+      place.photos && place.photos.length > 0 ? (
+        <img
+          src={place.photos[0].url}
+          alt={place.displayName?.text}
+          class="w-full h-48 object-cover"
+        />
+      ) : (
+        <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+          <span class="text-gray-500">No image available</span>
+        </div>
+      )
+    }
+  </div>
+  <div class="p-4">
+    <h3 class="text-2xl font-semibold mb-0">{place.displayName?.text}</h3>
+    <ul class="list-none flex-row flex space-x-2 text-neutral-600 text-sm">
+      {place.primaryType && <li>{place.primaryTypeDisplayName?.text}</li>}
+      <span>&bull;</span>
+      {place.distance && <li>{(place.distance / 1000).toFixed(2)}km away</li>}
+      <span>&bull;</span>
+      {place.rating && <li>⭐ {place.rating}</li>}
+    </ul>
+
+    <div class="tabs-container hidden">
+      <ul
+        class="mt-4 flex flex-nowrap text-sm font-medium text-center text-gray-500 mb-4"
+      >
+        {
+          tabs.map((tab) => (
+            <li class="me-2">
+              <a
+                href={`#${tab.id}`}
+                class:list={[
+                  "inline-block px-3 py-2 rounded-lg hover:text-gray-900 hover:bg-gray-100",
+                  { "text-white bg-black active": tab.isActive },
+                ]}
+                aria-current={tab.isActive ? "page" : undefined}
+              >
+                {tab.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <!-- About Tab Content -->
+      <div id="about" class="tab-content py-4 hidden">
+        {
+          place.editorialSummary && (
+            <p class="text-lg text-gray-700 font-normal mb-2">
+              {place.editorialSummary.text}
+            </p>
+          )
+        }
+
+        <ul class="list-none text-base text-gray-700">
+          {
+            place.formattedAddress && (
+              <li> Address: {place.formattedAddress}</li>
+            )
+          }
+          {
+            place.websiteUri && (
+              <li>
+                Website:{" "}
+                <a
+                  href={place.websiteUri}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {place.websiteUri}
+                </a>
+              </li>
+            )
+          }
+          {
+            place.additionalInfo.socketsAvailable && (
+              <li>
+                Sockets Available:{" "}
+                {place.additionalInfo.socketsAvailable ? "Yes" : "No"}
+              </li>
+            )
+          }
+        </ul>
+      </div>
+
+      <!-- Wi-Fi Details Tab Content -->
+      <div id="wifi" class="tab-content">
+        {
+          place.additionalInfo.wifiSSID && (
+            <div class="border border-b-0 border-gray-200 rounded-t-md py-2 px-2 flex flex-row items-center">
+              <span class="mr-2 h-full w-8 flex items-center justify-center">
+                📶
+              </span>
+              <span class="font-mono">{place.additionalInfo.wifiSSID}</span>
+            </div>
+          )
+        }
+        {
+          place.additionalInfo.wifiSpeed && (
+            <div class="border border-gray-200 py-2 px-2 flex flex-row items-center">
+              <span class="mr-2 h-full w-8 flex items-center justify-center">
+                ⚡
+              </span>
+              <span class="font-mono">
+                {place.additionalInfo.wifiSpeed}Mbps
+              </span>
+              <span class="ml-auto text-xs mr-1">
+                Updated: {formatDate(place.additionalInfo.wifiUpdated)}
+              </span>
+            </div>
+          )
+        }
+        {
+          place.additionalInfo.wifiPassword && (
+            <div class="border rounded-b-md border-t-0 border-gray-200 py-2 px-2 flex flex-row items-center">
+              <span class="mr-2 h-full w-8 flex items-center justify-center">
+                🔒
+              </span>
+              <input
+                class="font-mono bg-transparent"
+                type="text"
+                value={place.additionalInfo.wifiPassword}
+                readonly
+              />
+              <button class="ml-auto bg-black text-white px-2 py-1 rounded-md text-sm">
+                Copy
+              </button>
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Reviews Tab Content -->
+      <div id="reviews" class="tab-content hidden">
+        <p class="text-sm text-gray-600 mb-2">
+          Rating: {place.rating} ({place.userRatingCount} reviews)
+        </p>
+        <!-- You can add more detailed review information here -->
+      </div>
+
+      <!-- Opening Hours Tab Content -->
+      <div id="hours" class="tab-content hidden">
+        {
+          place.regularOpeningHours && (
+            <div class="text-sm text-gray-600 mb-1">
+              <p>Opening Hours:</p>
+              <ul class="list-disc list-inside pl-4">
+                {place.regularOpeningHours.weekdayDescriptions.map((day) => (
+                  <li>{day}</li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+      </div>
+    </div><!-- /tabs-container -->
+
+    <aside class="tags flex flex-row gap-2 flex-wrap mt-4">
+      {
+        place.tags.map((tag) => (
+          <div class="tag rounded-full bg-gray-100 text-black px-3 py-2 text-sm">
+            {tag}
+          </div>
+        ))
+      }
+    </aside>
+  </div>
+</article>
+
+<script>
+  function setupTabs() {
+    const tabLinks = document.querySelectorAll('a[href^="#"]')
+    const tabContents = document.querySelectorAll(".tab-content")
+
+    tabLinks.forEach((tabLink) => {
+      tabLink.addEventListener("click", (e) => {
+        e.preventDefault()
+        const tabId = tabLink.getAttribute("href").substring(1)
+
+        // Remove active class from all tab links and hide all tab contents
+        tabLinks.forEach((link) =>
+          link.classList.remove("active", "text-white", "bg-black")
+        )
+        tabContents.forEach((content) => content.classList.add("hidden"))
+
+        // Add active class to clicked tab link and show corresponding tab content
+        tabLink.classList.add("active", "text-white", "bg-black")
+        document.getElementById(tabId).classList.remove("hidden")
+      })
+    })
+  }
+
+  // Run the setup function when the DOM is fully loaded
+  document.addEventListener("DOMContentLoaded", setupTabs)
+</script>

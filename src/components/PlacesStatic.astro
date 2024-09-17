@@ -1,0 +1,150 @@
+---
+import PlaceStatic from './PlaceStatic.astro';
+import FilterBar from './FilterBarStatic.astro';
+
+const ALLOWED_TYPES = [
+  'art_gallery',
+  'cafe',
+  'library',
+  'museum',
+  'hotel',
+  'coffee_shop',
+  'performing_arts_theater'
+];
+
+// Helper function to generate random additional info
+const generateRandomAdditionalInfo = () => {
+  return {
+    userScore: Math.floor(Math.random() * 100),
+    wifiPassword: Math.random().toString(36).substring(2, 10),
+    wifiSpeed: Math.floor(Math.random() * 200) + 1,
+    wifiSSID: `WiFi_Network_${Math.floor(Math.random() * 1000)}`, // Add this line
+    socketsAvailable: Math.random() < 0.7,
+    wifiUpdated: new Date(Date.now() - Math.floor(Math.random() * 30 * 24 * 60 * 60 * 1000)).toISOString()
+  };
+};
+
+const samplePlaces = [
+  {
+    id: 'place1',
+    displayName: { text: 'Cozy Corner Café' },
+    primaryType: 'cafe',
+    primaryTypeDisplayName: { text: 'Café' },
+    rating: 4.5,
+    distance: 500,
+    formattedAddress: '123 Coffee St, Brew City, Beanland',
+    photos: [{ url: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80' }],
+    types: ['cafe', 'restaurant', 'food'],
+    userRatingCount: 100,
+    score: 0.9,
+    editorialSummary: { text: 'A cozy café with artisanal coffee and freshly baked pastries.' },
+    websiteUri: 'https://cozycornercafe.com',
+    additionalInfo: generateRandomAdditionalInfo(),
+    tags: ['Great Wi-Fi', 'Comfy', 'Great coffee', 'Good Vibes']
+  },
+  {
+    id: 'place2',
+    displayName: { text: 'Modern Masterpieces Gallery' },
+    primaryType: 'art_gallery',
+    primaryTypeDisplayName: { text: 'Art Gallery' },
+    rating: 4.2,
+    distance: 1200,
+    formattedAddress: '456 Palette Rd, Art City, Creativia',
+    photos: [{ url: 'https://images.unsplash.com/photo-1545033131-485ea67fd7c3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80' }],
+    types: ['art_gallery', 'museum'],
+    userRatingCount: 80,
+    score: 0.85,
+    editorialSummary: { text: 'A contemporary art gallery showcasing works from emerging local artists.' },
+    websiteUri: 'https://modernmasterpiecesgallery.com',
+    additionalInfo: generateRandomAdditionalInfo(),
+    tags: ['Spacious', 'Quiet', 'Good Vibes']
+  },
+  {
+    id: 'place3',
+    displayName: { text: 'Tranquil Tomes Library' },
+    primaryType: 'library',
+    primaryTypeDisplayName: { text: 'Library' },
+    rating: 4.8,
+    distance: 800,
+    formattedAddress: '789 Bookworm Ln, Read Town, Literaria',
+    photos: [{ url: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80' }],
+    types: ['library', 'book_store'],
+    userRatingCount: 120,
+    score: 0.95,
+    editorialSummary: { text: 'A serene library with an extensive collection of books and quiet reading nooks.' },
+    websiteUri: 'https://tranquiltomeslibrary.com',
+    additionalInfo: generateRandomAdditionalInfo(),
+    tags: ['Quiet', 'Spacious', 'Great Wi-Fi', 'Outlets']
+  },
+  {
+    id: 'place4',
+    displayName: { text: 'Historic Heritage Museum' },
+    primaryType: 'museum',
+    primaryTypeDisplayName: { text: 'Museum' },
+    rating: 4.6,
+    distance: 1500,
+    formattedAddress: '101 Artifact Ave, Antiquity City, Historyland',
+    photos: [{ url: 'https://images.unsplash.com/photo-1566127992631-137a642a90f4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80' }],
+    types: ['museum', 'tourist_attraction'],
+    userRatingCount: 200,
+    score: 0.92,
+    editorialSummary: { text: 'An immersive museum showcasing the rich history and cultural heritage of the region.' },
+    websiteUri: 'https://historicheritagemmuseum.com',
+    additionalInfo: generateRandomAdditionalInfo(),
+    tags: ['Spacious', 'Quiet', 'Good Vibes']
+  },
+  {
+    id: 'place5',
+    displayName: { text: 'Luxe Skyline Hotel' },
+    primaryType: 'hotel',
+    primaryTypeDisplayName: { text: 'Hotel' },
+    rating: 4.7,
+    distance: 2000,
+    formattedAddress: '555 Comfort Plaza, Skyview City, Hospitaland',
+    photos: [{ url: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80' }],
+    types: ['hotel', 'lodging'],
+    userRatingCount: 300,
+    score: 0.94,
+    editorialSummary: { text: 'A luxurious hotel offering stunning city views and world-class amenities.' },
+    websiteUri: 'https://luxeskylinehotel.com',
+    additionalInfo: generateRandomAdditionalInfo(),
+    tags: ['Great Wi-Fi', 'Comfy', 'Friendly', 'Tasty food']
+  }
+];
+
+const userLocation = { lat: 40.7128, lng: -74.0060 };
+---
+
+<div>
+  {Astro.props.env === 'development' && (
+    <button 
+      class="mb-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+    >
+      Clear Places Cache
+    </button>
+  )}
+  
+  <FilterBar />
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {samplePlaces.length === 0 && <p>No places found.</p>}
+    {samplePlaces.map(place => (
+      <PlaceStatic place={place} />
+    ))}
+  </div>
+</div>
+
+<script>
+  // Client-side JavaScript for interactivity
+  document.addEventListener('DOMContentLoaded', () => {
+    const clearCacheButton = document.querySelector('button');
+    if (clearCacheButton) {
+      clearCacheButton.addEventListener('click', () => {
+        console.log('Cache cleared');
+        // Implement cache clearing logic here if needed
+      });
+    }
+
+    // Add any other client-side interactivity here
+  });
+</script>

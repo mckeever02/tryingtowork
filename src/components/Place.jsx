@@ -396,7 +396,7 @@ export default function Place({ place }) {
   console.log('Rendering place:', place);
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <article key={place.id} className="bg-white rounded-lg shadow-md overflow-hidden">
       {place.photos && place.photos.length > 0 ? (
         <img 
           src={getPhotoUrl(place.photos[0].name)}
@@ -409,7 +409,27 @@ export default function Place({ place }) {
         </div>
       )}
       <div className="p-4">
-        <h3 className="text-xl font-semibold mb-2">{place.displayName?.text}</h3>
+        <h3 className="text-xl font-semibold mb-0">{place.displayName?.text}</h3>
+        <ul className="list-none flex-row flex space-x-2 text-neutral-600 text-sm">
+          {place.primaryType && (
+            <li>
+            { place.primaryTypeDisplayName.text }
+            </li>
+          )}
+          <span>&bull;</span>
+          {place.distance && (
+            <li>
+              {(place.distance / 1000).toFixed(2)}km away
+            </li>
+          )}
+          <span>&bull;</span>
+          {place.rating && (
+            <li>
+              ⭐ {place.rating}
+            </li>
+          )}
+          </ul>
+          
         <p className="text-gray-600 mb-1">{place.formattedAddress}</p>
         {(city || country) && (
           <p className="text-sm text-gray-500 mb-2">
@@ -585,6 +605,6 @@ export default function Place({ place }) {
           )}
         </div>
       </div>
-    </div>
+    </article>
   );
 }
