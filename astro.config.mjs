@@ -12,5 +12,8 @@ export default defineConfig({
       'import.meta.env.PUBLIC_SSUPABASE_ANON_KEY': JSON.stringify(process.env.SUPABASE_ANON_KEY)
     },
     plugins: []  // Ensure this is empty or remove it if you haven't added any Vite plugins
-  }
+  },
+  ssr: {
+    noExternal: ['framer-motion'],
+  },
 });
