@@ -126,89 +126,25 @@ const userLocation = { lat: 40.7128, lng: -74.0060 };
   
   <FilterBar />
   
-  <div id="places-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     {samplePlaces.length === 0 && <p>No places found.</p>}
     {samplePlaces.map(place => (
-      <div class="place-item">
-        <PlaceStatic place={place} />
-      </div>
+      <PlaceStatic place={place} />
     ))}
   </div>
 </div>
 
 <script>
-  import { animate } from 'framer-motion/dom';
-
+  // Client-side JavaScript for interactivity
   document.addEventListener('DOMContentLoaded', () => {
-    const placeItems = document.querySelectorAll('.place-item');
-    const modalContainer = document.getElementById('modal-container');
-    const modalOverlay = document.getElementById('modal-overlay');
-    const modalContent = document.getElementById('modal-content');
-
-    let activeItem = null;
-
-    placeItems.forEach(item => {
-      item.addEventListener('click', () => {
-        if (activeItem) return; // Prevent clicking while modal is open
-
-        activeItem = item;
-        const itemRect = item.getBoundingClientRect();
-        const itemClone = item.cloneNode(true);
-
-        // Style the clone to match the original item's position
-        itemClone.style.position = 'fixed';
-        itemClone.style.top = `${itemRect.top}px`;
-        itemClone.style.left = `${itemRect.left}px`;
-        itemClone.style.width = `${itemRect.width}px`;
-        itemClone.style.height = `${itemRect.height}px`;
-        itemClone.style.margin = '0';
-        itemClone.style.zIndex = '100';
-
-        document.body.appendChild(itemClone);
-
-        // Animate the clone to center and expand
-        animate(itemClone, {
-          top: '50%',
-          left: '50%',
-          x: '-50%',
-          y: '-50%',
-          width: '90vw',
-          maxWidth: '600px',
-          scale: 1,
-        }, { duration: 0.3, ease: 'easeInOut' });
-
-        // Show and animate the modal container
-        modalContainer.style.pointerEvents = 'auto';
-        animate(modalOverlay, { opacity: 0.5 }, { duration: 0.3 });
-
-        // Close modal on overlay click
-        modalOverlay.onclick = () => {
-          animate(itemClone, {
-            top: `${itemRect.top}px`,
-            left: `${itemRect.left}px`,
-            x: '0',
-            y: '0',
-            width: `${itemRect.width}px`,
-            height: `${itemRect.height}px`,
-            scale: 1,
-          }, { duration: 0.3, ease: 'easeInOut' }).then(() => {
-            document.body.removeChild(itemClone);
-            activeItem = null;
-          });
-
-          animate(modalOverlay, { opacity: 0 }, { duration: 0.3 }).then(() => {
-            modalContainer.style.pointerEvents = 'none';
-          });
-        };
+    const clearCacheButton = document.querySelector('button');
+    if (clearCacheButton) {
+      clearCacheButton.addEventListener('click', () => {
+        console.log('Cache cleared');
+        // Implement cache clearing logic here if needed
       });
-    });
+    }
 
-    // Initial animation for place items
-    placeItems.forEach((item, index) => {
-      animate(item, 
-        { opacity: [0, 1], y: [50, 0] },
-        { duration: 0.5, delay: index * 0.1 }
-      );
-    });
+    // Add any other client-side interactivity here
   });
 </script>
