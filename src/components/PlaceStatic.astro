@@ -1,5 +1,6 @@
 ---
-const { place } = Astro.props
+import { motion, AnimatePresence } from "framer-motion"
+const { place, isExpanded } = Astro.props
 
 const formatDate = (dateString) => {
   if (!dateString) return ""
@@ -19,10 +20,14 @@ const tabs = [
 ]
 ---
 
-<article class="bg-white rounded-lg shadow-sm overflow-hidden">
-  <div class="img-container relative">
+<article
+  class="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer card-shadow cursor-pointer transition-all duration-300 ease-in-out active:scale-[0.98]"
+  data-place-id={place.id}
+>
+  <div
+    class="img-container relative h-48 overflow-hidden flex items-center justify-center transition-all duration-300"
+  >
     <!-- Voting buttons -->
-    <!-- Note: You'll need to implement client-side interactivity for these buttons -->
     <div class="votes-container absolute top-0 left-0 p-3">
       <div
         class="votes rounded-full flex flex-col justify-center items-center p-1 bg-white shadow-sm"
@@ -32,7 +37,6 @@ const tabs = [
         >
           ↑
         </button>
-        <!-- User Score -->
         <span class="text-center text-sm font-semibold text-black inline-block">
           {place.additionalInfo.userScore || 0}
         </span>
@@ -48,7 +52,7 @@ const tabs = [
         <img
           src={place.photos[0].url}
           alt={place.displayName?.text}
-          class="w-full h-48 object-cover"
+          class="w-full object-cover"
         />
       ) : (
         <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
@@ -67,7 +71,10 @@ const tabs = [
       {place.rating && <li>⭐ {place.rating}</li>}
     </ul>
 
-    <div class="tabs-container hidden">
+    <div
+      class="tabs-container transition-all ease-in-out duration-300"
+      style="display: none; max-height: 0; overflow: hidden;"
+    >
       <ul
         class="mt-4 flex flex-nowrap text-sm font-medium text-center text-gray-500 mb-4"
       >
@@ -90,7 +97,7 @@ const tabs = [
       </ul>
 
       <!-- About Tab Content -->
-      <div id="about" class="tab-content py-4 hidden">
+      <div id="about" class="tab-content py-4">
         {
           place.editorialSummary && (
             <p class="text-lg text-gray-700 font-normal mb-2">
@@ -100,11 +107,7 @@ const tabs = [
         }
 
         <ul class="list-none text-base text-gray-700">
-          {
-            place.formattedAddress && (
-              <li> Address: {place.formattedAddress}</li>
-            )
-          }
+          {place.formattedAddress && <li>Address: {place.formattedAddress}</li>}
           {
             place.websiteUri && (
               <li>
@@ -178,7 +181,7 @@ const tabs = [
       </div>
 
       <!-- Reviews Tab Content -->
-      <div id="reviews" class="tab-content hidden">
+      <div id="reviews" class="tab-content">
         <p class="text-sm text-gray-600 mb-2">
           Rating: {place.rating} ({place.userRatingCount} reviews)
         </p>
@@ -186,7 +189,7 @@ const tabs = [
       </div>
 
       <!-- Opening Hours Tab Content -->
-      <div id="hours" class="tab-content hidden">
+      <div id="hours" class="tab-content">
         {
           place.regularOpeningHours && (
             <div class="text-sm text-gray-600 mb-1">
@@ -200,7 +203,7 @@ const tabs = [
           )
         }
       </div>
-    </div><!-- /tabs-container -->
+    </div>
 
     <aside class="tags flex flex-row gap-2 flex-wrap mt-4">
       {
@@ -215,6 +218,16 @@ const tabs = [
 </article>
 
 <script>
+  function setupCards() {
+    const cards = document.querySelectorAll("article[data-place-id]")
+    cards.forEach((card) => {
+      card.addEventListener("click", () => {
+        const placeId = card.getAttribute("data-place-id")
+        window.togglePlace(placeId)
+      })
+    })
+  }
+
   function setupTabs() {
     const tabLinks = document.querySelectorAll('a[href^="#"]')
     const tabContents = document.querySelectorAll(".tab-content")
@@ -237,6 +250,9 @@ const tabs = [
     })
   }
 
-  // Run the setup function when the DOM is fully loaded
-  document.addEventListener("DOMContentLoaded", setupTabs)
+  // Run the setup functions when the DOM is fully loaded
+  document.addEventListener("DOMContentLoaded", () => {
+    setupCards()
+    setupTabs()
+  })
 </script>

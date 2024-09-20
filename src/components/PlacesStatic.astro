@@ -1,16 +1,16 @@
 ---
-import PlaceStatic from './PlaceStatic.astro';
-import FilterBar from './FilterBarStatic.astro';
+import PlaceStatic from "./PlaceStatic.astro"
+import FilterBar from "./FilterBarStatic.astro"
 
 const ALLOWED_TYPES = [
-  'art_gallery',
-  'cafe',
-  'library',
-  'museum',
-  'hotel',
-  'coffee_shop',
-  'performing_arts_theater'
-];
+  "art_gallery",
+  "cafe",
+  "library",
+  "museum",
+  "hotel",
+  "coffee_shop",
+  "performing_arts_theater",
+]
 
 // Helper function to generate random additional info
 const generateRandomAdditionalInfo = () => {
@@ -20,123 +20,216 @@ const generateRandomAdditionalInfo = () => {
     wifiSpeed: Math.floor(Math.random() * 200) + 1,
     wifiSSID: `WiFi_Network_${Math.floor(Math.random() * 1000)}`, // Add this line
     socketsAvailable: Math.random() < 0.7,
-    wifiUpdated: new Date(Date.now() - Math.floor(Math.random() * 30 * 24 * 60 * 60 * 1000)).toISOString()
-  };
-};
+    wifiUpdated: new Date(
+      Date.now() - Math.floor(Math.random() * 30 * 24 * 60 * 60 * 1000)
+    ).toISOString(),
+  }
+}
 
 const samplePlaces = [
   {
-    id: 'place1',
-    displayName: { text: 'Cozy Corner Café' },
-    primaryType: 'cafe',
-    primaryTypeDisplayName: { text: 'Café' },
+    id: "place1",
+    displayName: { text: "Cozy Corner Café" },
+    primaryType: "cafe",
+    primaryTypeDisplayName: { text: "Café" },
     rating: 4.5,
     distance: 500,
-    formattedAddress: '123 Coffee St, Brew City, Beanland',
-    photos: [{ url: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80' }],
-    types: ['cafe', 'restaurant', 'food'],
+    formattedAddress: "123 Coffee St, Brew City, Beanland",
+    photos: [
+      {
+        url: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
+      },
+    ],
+    types: ["cafe", "restaurant", "food"],
     userRatingCount: 100,
     score: 0.9,
-    editorialSummary: { text: 'A cozy café with artisanal coffee and freshly baked pastries.' },
-    websiteUri: 'https://cozycornercafe.com',
+    editorialSummary: {
+      text: "A cozy café with artisanal coffee and freshly baked pastries.",
+    },
+    websiteUri: "https://cozycornercafe.com",
     additionalInfo: generateRandomAdditionalInfo(),
-    tags: ['Great Wi-Fi', 'Comfy', 'Great coffee', 'Good Vibes']
+    tags: ["Great Wi-Fi", "Comfy", "Great coffee", "Good Vibes"],
   },
   {
-    id: 'place2',
-    displayName: { text: 'Modern Masterpieces Gallery' },
-    primaryType: 'art_gallery',
-    primaryTypeDisplayName: { text: 'Art Gallery' },
+    id: "place2",
+    displayName: { text: "Modern Masterpieces Gallery" },
+    primaryType: "art_gallery",
+    primaryTypeDisplayName: { text: "Art Gallery" },
     rating: 4.2,
     distance: 1200,
-    formattedAddress: '456 Palette Rd, Art City, Creativia',
-    photos: [{ url: 'https://images.unsplash.com/photo-1545033131-485ea67fd7c3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80' }],
-    types: ['art_gallery', 'museum'],
+    formattedAddress: "456 Palette Rd, Art City, Creativia",
+    photos: [
+      {
+        url: "https://images.unsplash.com/photo-1545033131-485ea67fd7c3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
+      },
+    ],
+    types: ["art_gallery", "museum"],
     userRatingCount: 80,
     score: 0.85,
-    editorialSummary: { text: 'A contemporary art gallery showcasing works from emerging local artists.' },
-    websiteUri: 'https://modernmasterpiecesgallery.com',
+    editorialSummary: {
+      text: "A contemporary art gallery showcasing works from emerging local artists.",
+    },
+    websiteUri: "https://modernmasterpiecesgallery.com",
     additionalInfo: generateRandomAdditionalInfo(),
-    tags: ['Spacious', 'Quiet', 'Good Vibes']
+    tags: ["Spacious", "Quiet", "Good Vibes"],
   },
   {
-    id: 'place3',
-    displayName: { text: 'Tranquil Tomes Library' },
-    primaryType: 'library',
-    primaryTypeDisplayName: { text: 'Library' },
+    id: "place3",
+    displayName: { text: "Tranquil Tomes Library" },
+    primaryType: "library",
+    primaryTypeDisplayName: { text: "Library" },
     rating: 4.8,
     distance: 800,
-    formattedAddress: '789 Bookworm Ln, Read Town, Literaria',
-    photos: [{ url: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80' }],
-    types: ['library', 'book_store'],
+    formattedAddress: "789 Bookworm Ln, Read Town, Literaria",
+    photos: [
+      {
+        url: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
+      },
+    ],
+    types: ["library", "book_store"],
     userRatingCount: 120,
     score: 0.95,
-    editorialSummary: { text: 'A serene library with an extensive collection of books and quiet reading nooks.' },
-    websiteUri: 'https://tranquiltomeslibrary.com',
+    editorialSummary: {
+      text: "A serene library with an extensive collection of books and quiet reading nooks.",
+    },
+    websiteUri: "https://tranquiltomeslibrary.com",
     additionalInfo: generateRandomAdditionalInfo(),
-    tags: ['Quiet', 'Spacious', 'Great Wi-Fi', 'Outlets']
+    tags: ["Quiet", "Spacious", "Great Wi-Fi", "Outlets"],
   },
   {
-    id: 'place4',
-    displayName: { text: 'Historic Heritage Museum' },
-    primaryType: 'museum',
-    primaryTypeDisplayName: { text: 'Museum' },
+    id: "place4",
+    displayName: { text: "Historic Heritage Museum" },
+    primaryType: "museum",
+    primaryTypeDisplayName: { text: "Museum" },
     rating: 4.6,
     distance: 1500,
-    formattedAddress: '101 Artifact Ave, Antiquity City, Historyland',
-    photos: [{ url: 'https://images.unsplash.com/photo-1566127992631-137a642a90f4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80' }],
-    types: ['museum', 'tourist_attraction'],
+    formattedAddress: "101 Artifact Ave, Antiquity City, Historyland",
+    photos: [
+      {
+        url: "https://images.unsplash.com/photo-1566127992631-137a642a90f4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
+      },
+    ],
+    types: ["museum", "tourist_attraction"],
     userRatingCount: 200,
     score: 0.92,
-    editorialSummary: { text: 'An immersive museum showcasing the rich history and cultural heritage of the region.' },
-    websiteUri: 'https://historicheritagemmuseum.com',
+    editorialSummary: {
+      text: "An immersive museum showcasing the rich history and cultural heritage of the region.",
+    },
+    websiteUri: "https://historicheritagemmuseum.com",
     additionalInfo: generateRandomAdditionalInfo(),
-    tags: ['Spacious', 'Quiet', 'Good Vibes']
+    tags: ["Spacious", "Quiet", "Good Vibes"],
   },
   {
-    id: 'place5',
-    displayName: { text: 'Luxe Skyline Hotel' },
-    primaryType: 'hotel',
-    primaryTypeDisplayName: { text: 'Hotel' },
+    id: "place5",
+    displayName: { text: "Luxe Skyline Hotel" },
+    primaryType: "hotel",
+    primaryTypeDisplayName: { text: "Hotel" },
     rating: 4.7,
     distance: 2000,
-    formattedAddress: '555 Comfort Plaza, Skyview City, Hospitaland',
-    photos: [{ url: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80' }],
-    types: ['hotel', 'lodging'],
+    formattedAddress: "555 Comfort Plaza, Skyview City, Hospitaland",
+    photos: [
+      {
+        url: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
+      },
+    ],
+    types: ["hotel", "lodging"],
     userRatingCount: 300,
     score: 0.94,
-    editorialSummary: { text: 'A luxurious hotel offering stunning city views and world-class amenities.' },
-    websiteUri: 'https://luxeskylinehotel.com',
+    editorialSummary: {
+      text: "A luxurious hotel offering stunning city views and world-class amenities.",
+    },
+    websiteUri: "https://luxeskylinehotel.com",
     additionalInfo: generateRandomAdditionalInfo(),
-    tags: ['Great Wi-Fi', 'Comfy', 'Friendly', 'Tasty food']
-  }
-];
+    tags: ["Great Wi-Fi", "Comfy", "Friendly", "Tasty food"],
+  },
+]
 
-const userLocation = { lat: 40.7128, lng: -74.0060 };
+const userLocation = { lat: 40.7128, lng: -74.006 }
+
+const { places = samplePlaces } = Astro.props
 ---
 
 <div>
-  {Astro.props.env === 'development' && (
-    <button 
-      class="mb-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-    >
-      Clear Places Cache
-    </button>
-  )}
-  
+  {
+    Astro.props.env === "development" && (
+      <button class="mb-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+        Clear Places Cache
+      </button>
+    )
+  }
+
   <FilterBar />
-  
+
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    {samplePlaces.length === 0 && <p>No places found.</p>}
-    {samplePlaces.map(place => (
-      <PlaceStatic place={place} />
-    ))}
+    {places.length === 0 && <p>No places found.</p>}
+    {places.map((place) => <PlaceStatic place={place} />)}
   </div>
 </div>
 
 <script>
-  // Client-side JavaScript for interactivity
+  let expandedPlaceId = null;
+
+  function togglePlace(placeId, event) {
+    // Check if the click originated from within the tabs container
+    const tabsContainer = event.currentTarget.querySelector('.tabs-container');
+    if (tabsContainer && tabsContainer.contains(event.target)) {
+      return; // Do nothing if the click was inside the tabs container
+    }
+
+    expandedPlaceId = expandedPlaceId === placeId ? null : placeId;
+    updatePlaces();
+  }
+
+  function updatePlaces() {
+    const placeElements = document.querySelectorAll('article[data-place-id]');
+    placeElements.forEach(el => {
+      const placeId = el.getAttribute('data-place-id');
+      const isExpanded = placeId === expandedPlaceId;
+      const tabsContainer = el.querySelector('.tabs-container');
+      const imgContainer = el.querySelector('.img-container');
+      
+      if (isExpanded) {
+        el.style.transform = 'scale(1.02)';
+        el.style.zIndex = '10';
+        tabsContainer.style.display = 'block';
+        setTimeout(() => {
+          tabsContainer.style.maxHeight = tabsContainer.scrollHeight + 'px';
+          tabsContainer.style.opacity = '1';
+          tabsContainer.style.transform = 'scale(1)';
+        }, 10);
+        imgContainer.classList.remove('h-48');
+        imgContainer.classList.add('h-52');
+      } else {
+        el.style.transform = '';
+        el.style.zIndex = '1';
+        tabsContainer.style.maxHeight = '0px';
+        tabsContainer.style.opacity = '0';
+        tabsContainer.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          tabsContainer.style.display = 'none';
+        }, 300); // Match this with your transition duration
+        imgContainer.classList.remove('h-52');
+        imgContainer.classList.add('h-48');
+      }
+    });
+  }
+
+  // Make togglePlace function available globally
+  window.togglePlace = togglePlace;
+
+  function setupCards() {
+    const cards = document.querySelectorAll('article[data-place-id]');
+    cards.forEach(card => {
+      card.addEventListener('click', (event) => {
+        const placeId = card.getAttribute('data-place-id');
+        window.togglePlace(placeId, event);
+      });
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
+    setupCards();
+    
     const clearCacheButton = document.querySelector('button');
     if (clearCacheButton) {
       clearCacheButton.addEventListener('click', () => {
@@ -145,6 +238,7 @@ const userLocation = { lat: 40.7128, lng: -74.0060 };
       });
     }
 
-    // Add any other client-side interactivity here
+    // Initial update of places
+    updatePlaces();
   });
 </script>
