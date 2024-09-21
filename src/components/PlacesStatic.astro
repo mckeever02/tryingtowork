@@ -167,78 +167,119 @@ const { places = samplePlaces } = Astro.props
 </div>
 
 <script>
-  let expandedPlaceId = null;
+  let expandedPlaceId = null
 
-  function togglePlace(placeId, event) {
-    // Check if the click originated from within the tabs container
-    const tabsContainer = event.currentTarget.querySelector('.tabs-container');
-    if (tabsContainer && tabsContainer.contains(event.target)) {
-      return; // Do nothing if the click was inside the tabs container
+  function setupTabs(placeId) {
+    const tabsContainer = document.querySelector(
+      `[data-place-id="${placeId}"] .tabs-container`
+    )
+    const tabButtons = tabsContainer.querySelectorAll("button")
+    const bubble = tabsContainer.querySelector(".bubble")
+    const tabPanes = document.querySelectorAll(
+      `[data-place-id="${placeId}"] .tab-pane`
+    )
+
+    let activeTab = "about"
+
+    function setActiveTab(tabId) {
+      activeTab = tabId
+      tabButtons.forEach((button) => {
+        if (button.dataset.tab === tabId) {
+          button.classList.add("text-white")
+          button.classList.remove("text-gray-600")
+          bubble.style.display = "block"
+          bubble.style.width = `${button.offsetWidth}px`
+          bubble.style.height = `${button.offsetHeight}px`
+          bubble.style.left = `${button.offsetLeft}px`
+          bubble.style.top = `${button.offsetTop}px`
+        } else {
+          button.classList.remove("text-white")
+          button.classList.add("text-gray-600")
+        }
+      })
+
+      tabPanes.forEach((pane) => {
+        if (pane.id === `${tabId}-${placeId}`) {
+          pane.style.display = "block"
+        } else {
+          pane.style.display = "none"
+        }
+      })
     }
 
-    expandedPlaceId = expandedPlaceId === placeId ? null : placeId;
-    updatePlaces();
+    tabButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        e.stopPropagation()
+        setActiveTab(button.dataset.tab)
+      })
+    })
+
+    setActiveTab(activeTab)
+  }
+
+  function togglePlace(placeId, event) {
+    expandedPlaceId = expandedPlaceId === placeId ? null : placeId
+    updatePlaces()
+
+    if (expandedPlaceId) {
+      setupTabs(placeId)
+    }
   }
 
   function updatePlaces() {
-    const placeElements = document.querySelectorAll('article[data-place-id]');
-    placeElements.forEach(el => {
-      const placeId = el.getAttribute('data-place-id');
-      const isExpanded = placeId === expandedPlaceId;
-      const tabsContainer = el.querySelector('.tabs-container');
-      const imgContainer = el.querySelector('.img-container');
-      
-      if (isExpanded) {
-        el.style.transform = 'scale(1.02)';
-        el.style.zIndex = '10';
-        tabsContainer.style.display = 'block';
-        setTimeout(() => {
-          tabsContainer.style.maxHeight = tabsContainer.scrollHeight + 'px';
-          tabsContainer.style.opacity = '1';
-          tabsContainer.style.transform = 'scale(1)';
-        }, 10);
-        imgContainer.classList.remove('h-48');
-        imgContainer.classList.add('h-52');
-      } else {
-        el.style.transform = '';
-        el.style.zIndex = '1';
-        tabsContainer.style.maxHeight = '0px';
-        tabsContainer.style.opacity = '0';
-        tabsContainer.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-          tabsContainer.style.display = 'none';
-        }, 300); // Match this with your transition duration
-        imgContainer.classList.remove('h-52');
-        imgContainer.classList.add('h-48');
-      }
-    });
-  }
+    const placeElements = document.querySelectorAll("article[data-place-id]")
+    placeElements.forEach((el) => {
+      const placeId = el.getAttribute("data-place-id")
+      const isExpanded = placeId === expandedPlaceId
+      const tabsContainer = el.querySelector(".tabs-container")
+      const imgContainer = el.querySelector(".img-container")
 
-  // Make togglePlace function available globally
-  window.togglePlace = togglePlace;
+      if (isExpanded) {
+        el.style.transform = "scale(1.02)"
+        el.style.zIndex = "10"
+        tabsContainer.style.display = "block"
+        tabsContainer.style.maxHeight = "1000px"
+        setTimeout(() => {
+          tabsContainer.style.transform = "scale(1)"
+        }, 10)
+        imgContainer.classList.remove("h-48")
+        imgContainer.classList.add("h-52")
+      } else {
+        el.style.transform = ""
+        el.style.zIndex = "1"
+        tabsContainer.style.maxHeight = "0"
+        tabsContainer.style.transform = "scale(0.95)"
+        setTimeout(() => {
+          tabsContainer.style.display = "none"
+        }, 300) // Match this with your transition duration
+        imgContainer.classList.remove("h-52")
+        imgContainer.classList.add("h-48")
+      }
+    })
+  }
 
   function setupCards() {
-    const cards = document.querySelectorAll('article[data-place-id]');
-    cards.forEach(card => {
-      card.addEventListener('click', (event) => {
-        const placeId = card.getAttribute('data-place-id');
-        window.togglePlace(placeId, event);
-      });
-    });
+    const cards = document.querySelectorAll("article[data-place-id]")
+    cards.forEach((card) => {
+      card.addEventListener("click", (event) => {
+        const placeId = card.getAttribute("data-place-id")
+        togglePlace(placeId, event)
+      })
+    })
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    setupCards();
-    
-    const clearCacheButton = document.querySelector('button');
+  document.addEventListener("DOMContentLoaded", () => {
+    setupCards()
+
+    const clearCacheButton = document.querySelector("button")
     if (clearCacheButton) {
-      clearCacheButton.addEventListener('click', () => {
-        console.log('Cache cleared');
+      clearCacheButton.addEventListener("click", () => {
+        console.log("Cache cleared")
         // Implement cache clearing logic here if needed
-      });
+      })
     }
 
     // Initial update of places
-    updatePlaces();
-  });
+    updatePlaces()
+  })
 </script>
