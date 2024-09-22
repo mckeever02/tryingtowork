@@ -235,25 +235,67 @@ const { places = samplePlaces } = Astro.props
       const imgContainer = el.querySelector(".img-container")
 
       if (isExpanded) {
-        el.style.transform = "scale(1.02)"
-        el.style.zIndex = "10"
-        tabsContainer.style.display = "block"
-        tabsContainer.style.maxHeight = "1000px"
+        // Step 1: Animate to new size and position
+        el.classList.add(
+          "shadow-lg",
+          "z-50",
+          "scale-105",
+          "transition-all",
+          "duration-300"
+        );
+        el.classList.remove("z-1");
+        el.style.removeProperty('z-index');
+
+        // Calculate the position for centering
+        const rect = el.getBoundingClientRect();
+        const centerX = window.innerWidth / 2 - rect.width / 2;
+        const centerY = window.innerHeight / 2 - rect.height / 2;
+
+        el.style.transform = `translate(${centerX - rect.left}px, ${centerY - rect.top}px)`;
+
+        // Step 2: After animation, switch to fixed positioning
+          el.classList.add(
+            "fixed",
+            "top-1/2",
+            "left-1/2",
+            "-translate-x-1/2",
+            "-translate-y-1/2",
+            "scale-105"
+          );
+          el.style.removeProperty('transform');
+
+        tabsContainer.style.display = "block";
         setTimeout(() => {
-          tabsContainer.style.transform = "scale(1)"
-        }, 10)
-        imgContainer.classList.remove("h-48")
-        imgContainer.classList.add("h-52")
+          tabsContainer.style.maxHeight = tabsContainer.scrollHeight + "px";
+          tabsContainer.style.transform = "scale(1)";
+          tabsContainer.style.opacity = "1";
+        }, 10);
+
+        imgContainer.classList.remove("h-48");
+        imgContainer.classList.add("h-60");
       } else {
-        el.style.transform = ""
-        el.style.zIndex = "1"
-        tabsContainer.style.maxHeight = "0"
-        tabsContainer.style.transform = "scale(0.95)"
+        el.classList.remove(
+          "shadow-lg",
+          "fixed",
+          "top-1/2",
+          "left-1/2",
+          "z-50",
+          "-translate-x-1/2",
+          "-translate-y-1/2",
+          "scale-105"
+        );
+        el.classList.add("z-1", "transition-all", "duration-300");
+        el.style.transform = "none";
+
+        tabsContainer.style.maxHeight = "0";
+        tabsContainer.style.transform = "scale(0.95)";
+        tabsContainer.style.opacity = "0";
         setTimeout(() => {
-          tabsContainer.style.display = "none"
-        }, 300) // Match this with your transition duration
-        imgContainer.classList.remove("h-52")
-        imgContainer.classList.add("h-48")
+          tabsContainer.style.display = "none";
+        }, 300);
+
+        imgContainer.classList.remove("h-60");
+        imgContainer.classList.add("h-48");
       }
     })
   }
