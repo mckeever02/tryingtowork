@@ -1,13 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Places from '../components/Places.astro';
-import ErrorMessage from '../components/ErrorMessage.astro';
 ---
 
-<Layout title="Trying to Work">
-  <main class="container mx-auto px-4 py-8 max-w-screen-xl">
-    <h1 class="text-5xl text-center font-bold mb-6">Trying to Work</h1>
-    <Places />
-    <ErrorMessage />
-  </main>
+<Layout title="Cafe Finder">
+	<main class="min-h-screen bg-background">
+		<div class="container mx-auto px-4 py-8">
+			<h1 class="text-4xl font-bold text-foreground mb-8">Cafe Finder</h1>
+			<p class="text-muted-foreground">Fresh start with Astro + ShadCN UI</p>
+		</div>
+	</main>
 </Layout>
