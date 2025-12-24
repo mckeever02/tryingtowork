@@ -59,7 +59,7 @@
     "react-github-btn": "^1.0.5",
     "react-helmet": "^5.2.0",
     "react-live": "^1.12.0",
-    "react-map-gl": "^4.0.14",
+    "react-map-gl": "^7.0.21",
     "react-modal": "^3.8.1",
     "react-moment": "^0.8.4",
     "react-radio-group": "^3.0.3",
