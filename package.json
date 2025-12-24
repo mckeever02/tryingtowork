@@ -19,7 +19,7 @@
     "dotenv": "^7.0.0",
     "emotion": "^9.2.6",
     "emotion-server": "^9.2.6",
-    "gatsby": "^2.3.14",
+    "gatsby": "^2.32.13",
     "gatsby-image": "^2.0.22",
     "gatsby-mdx": "^0.3.5",
     "gatsby-plugin-emotion": "^2.0.0-rc.5",
